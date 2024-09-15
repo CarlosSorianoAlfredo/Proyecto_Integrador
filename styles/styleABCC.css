@@ -1,0 +1,140 @@
+/* Elimina márgenes y espaciado */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Configuración general del cuerpo */
+body {
+    font-family: 'Arial', sans-serif;
+    overflow-y: scroll; /* Agrega un scroll para toda la página */
+}
+
+/* Fondo animado con degradado en movimiento */
+.background-animation {
+    position: fixed; /* Fija el fondo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #ff7b00, #ff007b, #007bff, #00ff7b);
+    background-size: 400% 400%;
+    animation: gradient 10s ease infinite;
+    z-index: -1;
+}
+
+/* Animación suave del fondo */
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Contenedor principal */
+.abcc-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 500px;
+    max-width: 90%; /* Asegura que el contenedor no se desborde en pantallas pequeñas */
+    margin: 50px auto; /* Agrega un margen superior para separación */
+    position: relative; /* Permite el uso de absolute en elementos internos */
+}
+
+/* Título */
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Estilos de los campos de formulario */
+.form-group {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+    color: #555;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+select:focus {
+    border-color: #ff007b;
+    outline: none;
+}
+
+/* Botones de ABCC con efectos interactivos */
+.abcc-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 12px 20px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efecto de hover y animación */
+.btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Botones con diferentes colores */
+.btn-alta {
+    background-color: #28a745;
+}
+
+.btn-baja {
+    background-color: #dc3545;
+}
+
+.btn-cambio {
+    background-color: #ffc107;
+}
+
+.btn-consulta {
+    background-color: #007bff;
+}
+
+/* Efectos interactivos de hover para los colores */
+.btn-alta:hover {
+    background-color: #218838;
+}
+
+.btn-baja:hover {
+    background-color: #c82333;
+}
+
+.btn-cambio:hover {
+    background-color: #e0a800;
+}
+
+.btn-consulta:hover {
+    background-color: #0056b3;
+}
