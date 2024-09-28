@@ -3,23 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplicación Tutorias</title>
+    <title>Aplicación Tutorías</title>
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
     <!-- Encabezado -->
     <header>
         <nav>
-            <div class="logo"><img src="images/tutoria.png"></div>
+            <div class="logo"><img src="images/tutoria.png" alt="Logo Tutorías"></div>
             <div class="nav-links">
-                
-               <button onclick="window.location.href='pages/login.html'">Inicia Sesión</button>
-
-                <button onclick="window.location.href='pages/Registro.html'">Registrate</button>
+                <!-- Menú desplegable -->
+                <div class="dropdown">
+                    <button class="dropbtn">Talleres</button>
+                    <div class="dropdown-content">
+                        <a href="pages/practicConAJAXXMLHTTPRequest.html">Practica 1 Ajax</a>
+                        <a href="pages/Practica2_Ajax.html">Practica 2 Ajax</a>
+                        <a href="#">Link 3</a>
+                    </div>
+                </div>
+                <!-- Botones de inicio de sesión y registro -->
+                <button onclick="window.location.href='pages/login.html'">Inicia Sesión</button>
+                <button onclick="window.location.href='pages/Registro.html'">Regístrate</button>
             </div>
         </nav>
         <div class="header-content">
-            <h1>Comienza con tus tutorias </h1>
+            <h1>Comienza con tus tutorías</h1>
             <p>Organiza tus tareas, clases y calificaciones en un solo lugar.</p>
             <a href="#subscribe" class="cta-button">Empieza Gratis</a>
         </div>
@@ -61,7 +69,7 @@
 
     <!-- Pie de página -->
     <footer>
-        <p>&copy; 2024 TecNM. Todos los derechos reservados .</p>
+        <p>&copy; 2024 TecNM. Todos los derechos reservados.</p>
     </footer>
 </body>
 </html>

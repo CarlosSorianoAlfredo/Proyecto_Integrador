@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX CON HTMLHTTPRequest</title>
+</head>
+<body>
+    <button id="boton">Boton 1</button>
+    <div id="resultado"></div>
+    <script>
+        document.getElementById("boton").addEventListener("click",function(){
+            var solicitud = new XMLHttpRequest();
+            solicitud.open("GET","https://api.thedogapi.com/v1/images/search?limit=3",true);
+            solicitud.onload=function(){
+                if(solicitud.status===200){
+                    var data =JSON.parse(solicitud.responseText);
+                    var resultadoDiv=document.getElementById("resultado");
+                    resultadoDiv.innerHTML='';
+
+                    data.forEach(function(perrito){
+                        var img=document.createElement("img");
+                        img.src=perrito.url;
+                        img.style.width="300px";
+                        img.style.margin="10px";
+                        resultadoDiv.appendChild(img);
+                    })
+                }
+            }
+            solicitud.send();
+        })
+    </script>
+</body>
+</html>
