@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Compras</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"></script>
+    <script>
+        require(["dojo/on","dojo/dom","dojo/dom-construct","dojo/dom-attr","dojo/query","dojo/domReady!"],function(on,dom,domConstruct,domAttr,query){
+            var itemList=[];
+            function updateList(){
+                itemList.sort();
+                domConstruct.empty("shoppingList");
+                itemList.forEach(function(item){
+                    var newItem=domConstruct.create("li",{innerHTML:item});
+                    domConstruct.place(newItem,"shoppingList");
+                });
+            }
+            
+            on(dom.byId("addItemButton"),"click",function(){
+                var itemInput=dom.byId("itemInput").value;
+
+                if(itemInput){
+                    itemList.push(itemInput);
+                    updateList();
+                    domAttr.set(dom.byId("itemInput"),"value","");
+                }
+            });
+
+            on(dom.byId("filterInput"),"input",function(){
+                var filterText= dom.byId("filterInput").value.toLowerCase();
+                query("#shoppingList li").forEach(function(li){
+                    var itemText=li.innerHTML.toLowerCase();
+
+                    if(itemText.includes(filterText)){
+                        domAttr.set(li,"style","display: list-item;");
+                    }else{
+                        domAttr.set(li,"style","display: none;");
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Lista de Compras</h1>
+    <input type="text" id="itemInput" placeholder="Nuevo artículo..">
+    <button id="addItemButton">Agregar Artículo</button>
+
+    <input type="text" id="filterInput" placeholder="Filtro">
+
+    <ul id="shoppingList"></ul>
+</body>
+</html>

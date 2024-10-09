@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Tareas</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"></script>
+
+    <script>
+        require(["dojo/on","dojo/dom","dojo/dom-construct","dojo/dom-attr","dojo/domReady!"],function(on,dom,domConstruct,domAttr){
+            on(dom.byId("addButton"),"click",function(){
+                var taskText=dom.byId("taskInput").value;
+                if(taskText){
+                    var li=domConstruct.create("li",{innerHTML:taskText});
+                    var deleteButton=domConstruct.create("button",{innerHTML:"Eliminar"});
+
+                    on(deleteButton,"click",function(){
+                        domConstruct.destroy(li);
+                    });
+
+                    domConstruct.place(deleteButton,li,"last");
+                    domConstruct.place(li,dom.byId("taskList"),"last");
+                    domAttr.set(dom.byId("taskInput"),"value","");
+                }else{
+                    alert("Por favor ingresa una tarea!");
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Lista de Tareas</h1>
+    <input type="text"id="taskInput" placeholder="Ingresa una tarea" required>
+    <button id="addButton">Agregar Tarea</button>
+    <ul id="taskList"></ul>
+</body>
+</html>

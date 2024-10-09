@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de palabras: </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"></script>
+    <script>
+        require(["dojo/on","dojo/dom","dojo/dom-attr","dojo/domReady!"],function(on,dom,domAttr){
+        
+            on(dom.byId("textInput"),"input",function(){
+                var text =dom.byId("textInput").value;
+                var contadorPalabras=text.trim() ? text.trim().split(/\s+/).length:0;
+                domAttr.set(dom.byId("wordCountDisplay"),"innerHTML","Palabras: "+contadorPalabras);
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Contador de Palabras</h1>
+    <textarea  id="textInput" rows="5"cols="30" placeholder="Escribe algo...."></textarea>
+    <p id="wordCountDisplay">Palabras: 0</p>
+</body>
+</html>
