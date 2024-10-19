@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+   <head>
+
+      <script type = "text/javascript" src = "MooTools-Core-1.6.0.js"></script>
+      <script type = "text/javascript" src = "MooTools-More-1.6.0.js"></script>
+      
+
+      <script type = "text/javascript">
+
+         var rgbToHexa_Demo = function(){
+            var red = $('red').get('value');
+            var red_value = red.toInt();
+            var green = $('green').get('value');
+            var green_value = green.toInt();
+            var blue = $('blue').get('value');
+            var blue_value = blue.toInt();
+            var color = [red_value, green_value, blue_value].rgbToHex();
+            alert("El Color HEXADECIMAL es: " + color);
+         }
+         
+         window.addEvent('domready', function() {
+            $('rgbtohex').addEvent('click', rgbToHexa_Demo);
+         });
+      </script>
+   </head>
+   
+   <body>
+
+     Valor del Color Rojo: <input type = "text" id = "red" /><br/><br/>
+      Valor del color Verde: <input type = "text" id = "green" /><br/><br/>
+      Valor del Color Azul: <input type = "text" id = "blue" /><br/><br/>
+      <input type = "button" id = "rgbtohex" value = "RGB A Hexadecimal"/>
+
+
+
+
+
+   </body>
+</html>
+
+
