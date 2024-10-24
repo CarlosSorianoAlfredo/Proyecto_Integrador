@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAY 1</title>
+    <style>
+        .hide{
+            display: none;
+        }
+        .highlight-yellow{
+            background-color: yellow;
+        }
+
+        .highlight-purple{
+            background-color: purple;
+        }
+        .highlight-green{
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tay 1</h1>
+
+    <button id="togglebutton">Mostrar/Ocultar parrafos</button>
+    <hr>
+    <p class="paragraph">Soy amarillo</p>
+    <p class="paragraph">Soy purpura</p>
+    <p class="paragraph">Soy verde</p>
+    <hr>
+
+    <button id="highlight1">Resaltar Amarillo</button>
+    <button id="highlight2">Resaltar Purpura</button>
+    <button id="highlight3">Resaltar Verde</button>
+
+    <script src="scrip/tay.js"></script>
+    <script>
+        document.getElementById("togglebutton").on("click", function () {
+          document.querySelectorAll(".paragraph").toggleClass("hide");
+        });
+          
+        function removeHighlights() {
+          document.querySelectorAll(".paragraph").forEach(paragraph => {
+            paragraph.removeClass("highlight-yellow");
+            paragraph.removeClass("highlight-purple");
+            paragraph.removeClass("highlight-green");
+          });
+        }
+    
+        document.getElementById("highlight1").on("click", function () {
+          removeHighlights(); 
+          document.querySelector(".paragraph").addClass("highlight-yellow");
+        });
+    
+        document.getElementById("highlight2").on("click", function () {
+          removeHighlights(); 
+          document.querySelectorAll(".paragraph")[1].addClass("highlight-purple");
+        });
+    
+        document.getElementById("highlight3").on("click", function () {
+          removeHighlights(); 
+          document.querySelectorAll(".paragraph")[2].addClass("highlight-green");
+        });
+      </script>
+</body>
+</html>
