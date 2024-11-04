@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>layout con barra lateral</title>
+    <style>
+        .layout{
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            grid-template-rows: 100px 1fr;
+            grid-template-areas: "header header"
+            "sidebar content";
+            gap: 10px;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .header{
+            grid-area: header;
+            background-color: #f4b400;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+        
+        }
+
+        .sidebar{
+            grid-area: sidebar;
+            background-color: #34a853;
+            padding: 20px;
+            color: white;
+
+        }
+
+        .content{
+            grid-area: content;
+            background-color: #4385f4;
+            padding: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <div class="header">Encabezado</div>
+    <div class="sidebar">Barra lateral</div>
+    <div class="content">Contenido</div>
+</div>    
+</body>
+</html>

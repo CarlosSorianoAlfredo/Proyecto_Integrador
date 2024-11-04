@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAY 2</title>
+    <style>
+        #numberInput{
+            width: 200px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>TAY 2</h1>
+    <input type="number" id="numberInput" min="1" max="20" value="1">
+    <hr>
+    <button id="adjustSizeButton">Ajustar tamaño: </button>
+
+    <script src="../talleres/scripts/tay.js"></script>
+
+    <script>
+        document.getElementById("adjustSizeButton").on("click", function(){
+            const numberInput = document.getElementById("numberInput");
+            const number = parseInt(numberInput.value);
+
+            if (number > 20 || number < 1) {
+                alert("El numero no puede ser mauor a  20 ni menor a 1")
+                return
+            }
+
+            const inputBox = numberInput;
+            const baseSize = 200;
+            const newSize = baseSize + (baseSize * (number * 0.10));
+
+            inputBox.css("width", newSize + "px");
+        })
+    </script>
+</body>
+</html>

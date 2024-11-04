@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Realista - CSS Grid</title>
+  <style>
+    /* Estilos generales */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      height: 100%;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    /* Layout general con grid */
+    .dashboard {
+      display: grid;
+      grid-template-areas: 
+        "header header header"
+        "sidebar content content"
+        "footer footer footer";
+      grid-template-columns: 250px 1fr; /* Barra lateral de 250px, contenido flexible */
+      grid-template-rows: 70px 1fr auto; /* Encabezado fijo, contenido flexible y pie de página autoajustable */
+      min-height: 100vh; /* Asegura que el layout ocupe al menos el 100% de la ventana */
+      gap: 10px;
+    }
+
+    /* Estilos de las áreas */
+    .header {
+      grid-area: header;
+      background-color: #333;
+      color: white;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      margin: 0;
+    }
+
+    .user-menu {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .user-menu img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .sidebar {
+      grid-area: sidebar;
+      background-color: #222;
+      color: white;
+      padding: 20px;
+    }
+
+    .sidebar nav a {
+      display: block;
+      color: white;
+      padding: 10px;
+      margin-bottom: 10px;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .sidebar nav a:hover {
+      background-color: #444;
+    }
+
+    .content {
+      grid-area: content;
+      background-color: white;
+      padding: 20px;
+    }
+
+    .content h2 {
+      margin-top: 0;
+    }
+
+    .content .stats {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      background-color: #f0f0f0;
+      flex: 1 1 calc(33.333% - 20px); /* Tres tarjetas por fila */
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .footer {
+      grid-area: footer;
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+
+    /* Estilos responsivos */
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-areas: 
+          "header"
+          "sidebar"
+          "content"
+          "footer";
+        grid-template-columns: 1fr;
+      }
+
+      .stat-card {
+        flex: 1 1 100%; /* Tarjetas en una sola columna */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Encabezado -->
+    <header class="header">
+      <h1>Panel de Administración</h1>
+      <div class="user-menu">
+        <span>Hola, Usuario</span>
+        <img src="https://via.placeholder.com/40" alt="Usuario">
+      </div>
+    </header>
+
+    <!-- Barra lateral con menú de navegación -->
+    <aside class="sidebar">
+      <nav>
+        <a href="#">Dashboard</a>
+        <a href="#">Estadísticas</a>
+        <a href="#">Usuarios</a>
+        <a href="#">Ajustes</a>
+      </nav>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="content">
+      <h2>Estadísticas de Hoy</h2>
+      <div class="stats">
+        <div class="stat-card">
+          <h3>Visitas</h3>
+          <p>1,024</p>
+        </div>
+        <div class="stat-card">
+          <h3>Usuarios Nuevos</h3>
+          <p>128</p>
+        </div>
+        <div class="stat-card">
+          <h3>Ventas</h3>
+          <p>$12,430</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="footer">
+      &copy; 2024 Panel de Administración - Todos los derechos reservados.
+    </footer>
+  </div>
+</body>
+</html>
