@@ -8,6 +8,7 @@
         .hide{
             display: none;
         }
+<<<<<<< HEAD
         .highlight-yellow{
             background-color: yellow;
         }
@@ -18,11 +19,25 @@
         .highlight-green{
             background-color: green;
         }
+=======
+
+        .highlight-yellow{
+            background-color: yellow;
+        }
+        .highlight-blue{
+            background-color: blue;
+        }
+        .highlight-red{
+            background-color: red;
+        }
+
+>>>>>>> 13d855f3b1a1edf860879188570c1290a40a071f
     </style>
 </head>
 <body>
     <h1>Tay 1</h1>
 
+<<<<<<< HEAD
     <button id="togglebutton">Mostrar/Ocultar parrafos</button>
     <hr>
     <p class="paragraph">Soy amarillo</p>
@@ -37,14 +52,36 @@
     <script src="scrip/tay.js"></script>
     <script>
         document.getElementById("togglebutton").on("click", function () {
+=======
+    <button id ="toggleButton">Mostrar/Ocultar parrafos</button>
+    <hr>
+
+    <p class="paragraph">Soy amarillo</p>
+    <p class="paragraph">Soy azul</p>
+    <p class="paragraph">Soy rojo</p>
+    <hr>
+
+    <button id ="highlight1">Resaltar Amarillo</button>
+    <button id ="highlight2">Resaltar Azul</button>
+    <button id ="highlight3">Resaltar Rojo</button>
+
+    <script src="../talleres/scripts/tay.js"></script>
+    <script>
+        document.getElementById("toggleButton").on("click", function () {
+>>>>>>> 13d855f3b1a1edf860879188570c1290a40a071f
           document.querySelectorAll(".paragraph").toggleClass("hide");
         });
           
         function removeHighlights() {
           document.querySelectorAll(".paragraph").forEach(paragraph => {
             paragraph.removeClass("highlight-yellow");
+<<<<<<< HEAD
             paragraph.removeClass("highlight-purple");
             paragraph.removeClass("highlight-green");
+=======
+            paragraph.removeClass("highlight-blue");
+            paragraph.removeClass("highlight-red");
+>>>>>>> 13d855f3b1a1edf860879188570c1290a40a071f
           });
         }
     
@@ -55,13 +92,24 @@
     
         document.getElementById("highlight2").on("click", function () {
           removeHighlights(); 
+<<<<<<< HEAD
           document.querySelectorAll(".paragraph")[1].addClass("highlight-purple");
+=======
+          document.querySelectorAll(".paragraph")[1].addClass("highlight-blue");
+>>>>>>> 13d855f3b1a1edf860879188570c1290a40a071f
         });
     
         document.getElementById("highlight3").on("click", function () {
           removeHighlights(); 
+<<<<<<< HEAD
           document.querySelectorAll(".paragraph")[2].addClass("highlight-green");
         });
       </script>
+=======
+          document.querySelectorAll(".paragraph")[2].addClass("highlight-red");
+        });
+      </script>
+
+>>>>>>> 13d855f3b1a1edf860879188570c1290a40a071f
 </body>
 </html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flexbox - Galería de Productos</title>
+  <style>
+    /* Estilos generales */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    /* Contenedor de productos con Flexbox */
+    .product-grid {
+      display: flex;
+      justify-content: space-between; /* Espacio entre las tarjetas */
+      align-items: stretch;           /* Todas las tarjetas tendrán la misma altura */
+      flex-wrap: wrap;                /* Las tarjetas se ajustan en múltiples filas si es necesario */
+      gap: 20px;                      /* Espacio entre las tarjetas */
+      margin-top: 20px;
+    }
+
+    /* Estilos de cada tarjeta */
+    .product-card {
+      flex: 1 1 calc(33.333% - 20px); /* Cada tarjeta ocupa un tercio del contenedor menos el espacio de los márgenes */
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px); /* Efecto de elevar al hacer hover */
+    }
+
+    .product-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .product-info {
+      padding: 15px;
+    }
+
+    .product-title {
+      font-size: 18px;
+      margin: 0 0 10px;
+      color: #333;
+    }
+
+    .product-description {
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* Estilos responsivos */
+    @media (max-width: 768px) {
+      .product-card {
+        flex: 1 1 calc(50% - 20px); /* En pantallas medianas, las tarjetas ocuparán la mitad del ancho */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .product-card {
+        flex: 1 1 100%; /* En pantallas pequeñas, las tarjetas ocuparán el 100% del ancho */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Encabezado -->
+    <h1>Galería de Productos</h1>
+
+    <!-- Contenedor de tarjetas de productos -->
+    <div class="product-grid">
+      <!-- Tarjeta de producto 1 -->
+      <div class="product-card">
+        <div class="product-image">
+          <img src="https://via.placeholder.com/400x300" alt="Producto 1">
+        </div>
+        <div class="product-info">
+          <h2 class="product-title">Producto 1</h2>
+          <p class="product-description">Descripción breve del producto 1. Ideal para ventas online.</p>
+        </div>
+      </div>
+
+      <!-- Tarjeta de producto 2 -->
+      <div class="product-card">
+        <div class="product-image">
+          <img src="https://via.placeholder.com/400x300" alt="Producto 2">
+        </div>
+        <div class="product-info">
+          <h2 class="product-title">Producto 2</h2>
+          <p class="product-description">Descripción breve del producto 2. Un excelente artículo para comprar.</p>
+        </div>
+      </div>
+
+      <!-- Tarjeta de producto 3 -->
+      <div class="product-card">
+        <div class="product-image">
+          <img src="https://via.placeholder.com/400x300" alt="Producto 3">
+        </div>
+        <div class="product-info">
+          <h2 class="product-title">Producto 3</h2>
+          <p class="product-description">Descripción breve del producto 3. Alta calidad y gran valor.</p>
+        </div>
+      </div>
+
+      <!-- Tarjeta de producto 4 -->
+      <div class="product-card">
+        <div class="product-image">
+          <img src="https://via.placeholder.com/400x300" alt="Producto 4">
+        </div>
+        <div class="product-info">
+          <h2 class="product-title">Producto 4</h2>
+          <p class="product-description">Descripción breve del producto 4. Un artículo muy popular.</p>
+        </div>
+      </div>
+
+      <!-- Tarjeta de producto 5 -->
+      <div class="product-card">
+        <div class="product-image">
+          <img src="https://via.placeholder.com/400x300" alt="Producto 5">
+        </div>
+        <div class="product-info">
+          <h2 class="product-title">Producto 5</h2>
+          <p class="product-description">Descripción breve del producto 5. Excelente relación calidad-precio.</p>
+        </div>
+      </div>
+
+      <!-- Tarjeta de producto 6 -->
+      <div class="product-card">
+        <div class="product-image">
+          <img src="https://via.placeholder.com/400x300" alt="Producto 6">
+        </div>
+        <div class="product-info">
+          <h2 class="product-title">Producto 6</h2>
+          <p class="product-description">Descripción breve del producto 6. Perfecto para cualquier ocasión.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
