@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="152dp"
+        android:layout_marginTop="36dp"
+        android:text="Agregar Alumno"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lbl_num_Control"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="146dp"
+        android:layout_marginTop="31dp"
+        android:text="Numero de Control"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Spinner
+        android:id="@+id/spinner_edad"
+        android:layout_width="152dp"
+        android:layout_height="82dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_edad" />
+
+    <TextView
+        android:id="@+id/lbl_edad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="26dp"
+        android:text="Edad"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/caja_Segundo_Ap" />
+
+    <EditText
+        android:id="@+id/caja_Num_Control"
+        android:layout_width="286dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_num_Control" />
+
+    <TextView
+        android:id="@+id/lbl_nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="180dp"
+        android:layout_marginTop="24dp"
+        android:text="Nombre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/caja_Num_Control" />
+
+    <EditText
+        android:id="@+id/caja_Nombre"
+        android:layout_width="300dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_nombre" />
+
+    <Button
+        android:id="@+id/btn_agregar_altas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="22dp"
+        android:onClick="agregarAlumno"
+        android:text="Agregar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_Carreras" />
+
+    <TextView
+        android:id="@+id/lbl_Primer_Ap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="8dp"
+        android:text="Primer Apellido"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/caja_Nombre" />
+
+    <EditText
+        android:id="@+id/caja_Primer_Ap"
+        android:layout_width="308dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_Primer_Ap" />
+
+    <TextView
+        android:id="@+id/lbl_Segundo_Ap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="146dp"
+        android:layout_marginTop="9dp"
+        android:text="Segundo Apellido"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/caja_Primer_Ap" />
+
+    <EditText
+        android:id="@+id/caja_Segundo_Ap"
+        android:layout_width="312dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="7dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_Segundo_Ap" />
+
+    <TextView
+        android:id="@+id/lbl_Semestre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="174dp"
+        android:layout_marginTop="25dp"
+        android:text="Semestre"
+        app:layout_constraintStart_toEndOf="@+id/lbl_edad"
+        app:layout_constraintTop_toBottomOf="@+id/caja_Segundo_Ap" />
+
+    <Spinner
+        android:id="@+id/spinner_Semestre"
+        android:layout_width="153dp"
+        android:layout_height="81dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginTop="29dp"
+        app:layout_constraintStart_toEndOf="@+id/spinner_edad"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_Semestre" />
+
+    <TextView
+        android:id="@+id/lbl_Carrera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="168dp"
+        android:layout_marginTop="170dp"
+        android:text="Carrera"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/caja_Segundo_Ap" />
+
+    <Spinner
+        android:id="@+id/spinner_Carreras"
+        android:layout_width="383dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_Carrera" />
+</androidx.constraintlayout.widget.ConstraintLayout>

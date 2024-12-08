@@ -1,0 +1,78 @@
+/* Ajustar el navbar para centrar los elementos */
+.navbar-nav {
+    margin: auto; /* Centrar los botones */
+    display: flex; /* Usar flexbox */
+    justify-content: center; /* Asegurar que estén alineados en el centro */
+    gap: 15px; /* Separar botones con espacio */
+}
+
+/* Botones del navbar */
+.navbar .btn {
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+/* Botones específicos de opciones */
+.navbar .btn-primary {
+    background-color: #004173; /* Color oscuro */
+    color: white;
+}
+
+.navbar .btn-primary:hover {
+    background-color: #00345a; /* Efecto hover */
+}
+
+/* Botón cerrar sesión */
+.navbar .btn-warning {
+    font-size: 0.9em; /* Reducir tamaño del botón */
+    padding: 8px 15px; /* Ajustar padding */
+}
+
+.navbar .btn-warning:hover {
+    background-color: #e6a700; /* Efecto hover */
+}
+
+
+/* Botones del navbar */
+.mx-auto .btn {
+    font-size: 1em;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #004173;
+    color: #fff;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.mx-auto .btn:hover {
+    background-color: #0067a3;
+    transform: scale(1.05);
+}
+
+.mx-auto .btn:active {
+    background-color: #005792;
+    transform: scale(0.95);
+}
+
+/* Botón de cerrar sesión */
+.btn-warning {
+    font-size: 0.9em;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+.btn-warning:active {
+    background-color: #d39e00;
+    transform: scale(0.95);
+}
