@@ -1,5 +1,6 @@
 <?php
 include_once("../../backend/controllers/controller_alumno.php");
+include '../../backend/scripts/auth.php';
 
 $alumnoDAO = new AlumnoDAO();
 $filtros = [

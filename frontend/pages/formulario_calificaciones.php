@@ -3,7 +3,8 @@ include_once('../../backend/controllers/controller_asignatura.php');
 include_once('../../backend/controllers/controller_alumno.php');
 session_start();
 
-// Verificar si se pasa el número de control por la URL
+
+include '../../backend/scripts/auth.php';
 if (empty($_GET['numeroDeControl'])) {
     $_SESSION['mensaje'] = "No se especificó un número de control.";
     header('Location: lista_alumnos.php');

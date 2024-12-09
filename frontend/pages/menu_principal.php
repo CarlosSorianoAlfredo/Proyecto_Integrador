@@ -9,7 +9,7 @@ if (!isset($_SESSION['valida']) || !$_SESSION['valida']) {
     exit();
 }
 
-$acceso_menu = $_SESSION['acceso_menu'] ?? []; // Lista de menús accesibles, por defecto un array vacío
+$acceso_menu = $_SESSION['acceso_menu'] ?? []; 
 ?>
 
 <!DOCTYPE html>

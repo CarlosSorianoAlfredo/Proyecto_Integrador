@@ -1,5 +1,5 @@
 <?php
-// Verificar si la sesión no está iniciada antes de llamarla
+include '../../backend/scripts/auth.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

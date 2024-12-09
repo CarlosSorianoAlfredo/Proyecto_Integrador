@@ -2,6 +2,7 @@
 require_once('menu_principal.php'); // Aquí añades el menú principal al inicio
 require_once('../../backend/controllers/controller_alumno.php');
 $dao = new AlumnoDAO();
+include '../../backend/scripts/auth.php';
 $carreras = $dao->obtenerCarreras();
 $tutores = $dao->obtenerTutores();
 $enRiesgoOptions = ['Sí', 'No'];

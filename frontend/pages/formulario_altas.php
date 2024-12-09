@@ -1,13 +1,6 @@
 <?php
 // Validar sesión
-if (session_status() === PHP_SESSION_NONE) { 
-    session_start();
-}
-
-if (!isset($_SESSION['valida']) || !$_SESSION['valida']) {
-    header('Location: login.php');
-    exit(); 
-}
+include '../../backend/scripts/auth.php';
 include_once('../../backend/controllers/controller_alumno.php');
 include_once('menu_principal.php');
 

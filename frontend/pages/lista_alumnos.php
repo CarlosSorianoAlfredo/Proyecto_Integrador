@@ -1,6 +1,7 @@
 <?php
 include_once('../../backend/controllers/controller_alumno.php');
 session_start();
+include '../../backend/scripts/auth.php';
 
 $alumnoDAO = new AlumnoDAO();
 $alumnos = $alumnoDAO->mostrarAlumnos();
