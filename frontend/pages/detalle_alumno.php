@@ -78,7 +78,7 @@ if (isset($_GET['nc'])) {
                     </table>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="javascript:window.close()" class="btn btn-secondary">Cerrar</a>
+                    <a href="bajas_cambios.php" class="btn btn-secondary">Cerrar</a>
                 </div>
             </div>
         </div>

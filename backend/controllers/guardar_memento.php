@@ -1,60 +1,73 @@
 <?php
-// Mostrar errores en pantalla
+// Mostrar errores en pantalla (deshabilitar en producción)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Iniciar la sesión
 session_start();
+
+// Incluir la conexión a la base de datos
 include_once('../../database/conexion_bd_proyecto.php');
 
-// Crear una instancia de la conexión PDO
-$conexionBD = new ConexionBDEscuela();
-$conn = $conexionBD->getConexion();
+// Crear una instancia de la conexión PDO a través del Singleton
+$conn = ConexionBDEscuela::getInstancia()->getConexion();
 
-if (!$conn) {
-    die("Error en la conexión a la base de datos: " . $conn->errorInfo()[2]);
-}
+// Habilitar modo de errores en PDO
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Procesar solo solicitudes POST
+// Verificar que el método sea POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verificar que se envíen los datos necesarios
     if (!empty($_POST['numControl'])) {
         $numControl = $_POST['numControl'];
 
-        // Guardar los datos del alumno eliminado en la sesión
-        $_SESSION['ultimo_eliminado'] = [
-            'Num_Control' => $numControl,
-            'Nombre' => $_POST['nombre'] ?? null,
-            'Primer_Apellido' => $_POST['primerAp'] ?? null,
-            'Segundo_Apellido' => $_POST['segundoAp'] ?? null,
-            'Fecha_Nacimiento' => $_POST['fecha'] ?? null,
-            'Semestre' => $_POST['semestre'] ?? null,
-            'Carrera' => $_POST['carrera'] ?? null,
-            'Tutor_id' => $_POST['tutorId'] ?? null,
-            'enRiesgo' => $_POST['enRiesgo'] ?? null,
-        ];
+        try {
+            // Iniciar la transacción
+            $conn->beginTransaction();
 
-        // Eliminar el alumno de la base de datos utilizando PDO
-        $query = "DELETE FROM alumno WHERE Num_Control = :numControl";
-        $stmt = $conn->prepare($query);
+            // Obtener los datos del alumno antes de eliminarlo
+            $querySelect = "SELECT * FROM alumno WHERE Num_Control = :numControl";
+            $stmtSelect = $conn->prepare($querySelect);
+            $stmtSelect->bindParam(':numControl', $numControl, PDO::PARAM_STR);
+            $stmtSelect->execute();
 
-        if ($stmt) {
-            $stmt->bindParam(':numControl', $numControl, PDO::PARAM_STR);
+            $alumno = $stmtSelect->fetch(PDO::FETCH_ASSOC);
 
-            if ($stmt->execute()) {
-                echo "Alumno eliminado con éxito.";
-            } else {
-                echo "Error al ejecutar la consulta: " . implode(" - ", $stmt->errorInfo());
+            if (!$alumno) {
+                throw new Exception("El número de control no existe en la base de datos.");
             }
-        } else {
-            echo "Error al preparar la consulta: " . implode(" - ", $conn->errorInfo());
+
+            // Guardar los datos en la sesión
+            $_SESSION['respaldo_alumno'] = $alumno;
+
+            // Eliminar el registro
+            $queryDelete = "DELETE FROM alumno WHERE Num_Control = :numControl";
+            $stmtDelete = $conn->prepare($queryDelete);
+            $stmtDelete->bindParam(':numControl', $numControl, PDO::PARAM_STR);
+
+            if ($stmtDelete->execute()) {
+                // Confirmar la transacción
+                $conn->commit();
+
+                // Responder con éxito
+                echo json_encode(['status' => 'success', 'message' => 'Alumno eliminado correctamente.']);
+                
+            } else {
+                throw new Exception("Error al eliminar el alumno.");
+            }
+        } catch (Exception $e) {
+            // Revertir la transacción en caso de error
+            $conn->rollBack();
+            echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
         }
     } else {
-        echo "No se recibió un número de control.";
+        echo json_encode(['status' => 'error', 'message' => 'No se recibió un número de control válido.']);
     }
 } else {
-    echo "Método no permitido.";
+    echo json_encode(['status' => 'error', 'message' => 'Método no permitido.']);
 }
 
-// Cerrar la conexión PDO
+// Cerrar la conexión
 $conn = null;
 ?>

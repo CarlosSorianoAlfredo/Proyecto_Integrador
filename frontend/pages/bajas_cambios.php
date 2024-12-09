@@ -239,6 +239,7 @@ $(document).on('click', '.editar', function () {
     });
 });
 
+
 $(document).on('click', '.eliminar', function (e) {
     e.preventDefault();
     console.log("Botón de eliminar presionado");
@@ -252,6 +253,7 @@ $(document).on('click', '.eliminar', function (e) {
         carrera: $(this).data('carrera'),
         tutorId: $(this).data('tutor-id'),
         enRiesgo: $(this).data('en-riesgo')
+       
     };
 
     $.post('../../backend/controllers/guardar_memento.php', alumno, function () {
@@ -262,7 +264,6 @@ $(document).on('click', '.eliminar', function (e) {
             </div>
         `);
         $('body').prepend(restoreButton);
-
         $('#restore-button').on('click', function () {
             $.post('../../backend/controllers/restaurar_memento.php', function () {
                 alert('Alumno restaurado exitosamente.');
@@ -278,6 +279,8 @@ $(document).on('click', '.eliminar', function (e) {
             $(".alert").fadeOut("slow", function () {
                 $(this).remove();
             });
+            location.reload();
+
         }, 5000);
     });
 </script>

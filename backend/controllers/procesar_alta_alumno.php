@@ -1,5 +1,5 @@
 <?php
-include_once('../../backend/controllers/controller_alumno.php');
+include_once('../../backend/fachadas/fachada_alumno.php');
 include_once('../../backend/models/model_alumno.php');
 session_start();
 
@@ -79,10 +79,10 @@ $alumno = new Alumno(
     $idTutor
 );
 
-// Registrar el alumno en la base de datos
-$alumnoDAO = new AlumnoDAO();
+// Usar Fachada para registrar el alumno
+$fachadaAlumno = new Fachada_Alumno();
 try {
-    $res = $alumnoDAO->agregarAlumno($alumno); // Este método debe estar implementado con PDO
+    $res = $fachadaAlumno->registrarAlumno($alumno);
     if ($res) {
         $_SESSION['mensaje'] = "Registro AGREGADO Correctamente!";
         // Limpiar errores y datos temporales de sesión
@@ -103,3 +103,4 @@ try {
 // Redirigir al formulario
 header('Location: ../../frontend/pages/formulario_altas.php');
 exit();
+?>
