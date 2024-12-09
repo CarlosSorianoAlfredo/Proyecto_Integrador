@@ -6,7 +6,13 @@ class CalificacionDAO {
 
     public function __construct() {
         $this->conexion = new ConexionBDEscuela();
+    } public static function getInstancia() {
+        if (!isset(self::$instancia)) {
+            self::$instancia = new AlumnoDAO();
+        }
+        return self::$instancia;
     }
+
 
     public function guardarCalificacion($numeroDeControl, $idAsignatura, $puntaje) {
         $sql = "INSERT INTO calificacion (Numero_de_control, ID_asignatura, Puntaje) 

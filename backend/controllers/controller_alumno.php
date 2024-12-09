@@ -8,6 +8,12 @@ class AlumnoDAO {
     public function __construct() {
         $this->conexion = ConexionBDEscuela::getInstancia()->getConexion();
     }
+    public static function getInstancia() {
+        if (!isset(self::$instancia)) {
+            self::$instancia = new AlumnoDAO();
+        }
+        return self::$instancia;
+    }
 
     //=========================== METODOS ABCC (CRUD) ==========================
     //---------------------------- ALTAS ---------------------------------

@@ -4,8 +4,15 @@ class AsignaturaDAO {
     private $conexion;
 
     public function __construct() {
-        $this->conexion = new ConexionBDEscuela(); 
+        $this->conexion = ConexionBDEscuela::getInstancia()->getConexion();
     }
+    public static function getInstancia() {
+        if (!isset(self::$instancia)) {
+            self::$instancia = new AlumnoDAO();
+        }
+        return self::$instancia;
+    }
+
 
     public function obtenerAsignaturasPorCarreraYSemestre($idCarrera, $semestre) {
         $sql = "SELECT ID_asignatura, Nombre_asignatura 
