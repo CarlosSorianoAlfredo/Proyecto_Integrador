@@ -13,6 +13,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <link rel="stylesheet" href="../../frontend/styles/style_bajas_cambios.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Usamos aqui Jquery-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
@@ -193,6 +194,7 @@ if (session_status() === PHP_SESSION_NONE) {
     'LA': 'Licenciatura en Administración de Empresas',
     'LC': 'Licenciatura en Contaduría Pública'
 };
+//jQuery se utiliza para manejar eventos y manipular el DOM
 $(document).on('click', '.editar', function () {
     const numControl = $(this).data('control');
     const nombre = $(this).data('nombre');

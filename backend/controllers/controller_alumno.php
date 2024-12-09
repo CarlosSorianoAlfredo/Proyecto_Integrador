@@ -266,9 +266,24 @@ class AlumnoDAO {
         if ($row = mysqli_fetch_assoc($result)) {
             return $row['Id_tutor'];
         }
-        return null; // No encontrado
+        return null; 
     }
-      
+
+    public function obtenerUltimoNumControl() {
+    $conexion = $this->conexion->getConexion();  
+
+    $query = "SELECT num_control FROM alumno ORDER BY num_control DESC LIMIT 1";
+    $result = mysqli_query($conexion, $query);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        return $row['num_control'];
+    } else {
+        return null;
+    }
+}
+
+    
     public function obtenerCalificacionesPorAlumno($numeroDeControl) {
         $sql = "SELECT c.ID_asignatura, a.Nombre_asignatura, c.Puntaje
                 FROM calificacion c

@@ -7,6 +7,7 @@ include_once('menu_principal.php');
 $alumnoDAO = new AlumnoDAO();
 $tutores = $alumnoDAO->obtenerTutores();
 $carreras = $alumnoDAO->obtenerCarreras(); 
+$num=$alumnoDAO->obtenerUltimoNumControl()+1;
 ?>
 
 <!DOCTYPE html>
@@ -42,17 +43,17 @@ $carreras = $alumnoDAO->obtenerCarreras();
 
             <form action="../../backend/controllers/procesar_alta_alumno.php" method="POST">
                 <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="caja_num_control" class="form-label">Número de Control</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="caja_num_control" 
-                            name="caja_num_control" 
-                            placeholder="Solo números"
-                            value="<?= $_SESSION['nc'] ?? '' ?>"
-                            required>
-                        <div class="text-danger"><?= $_SESSION['error_nc'] ?? '' ?></div>
+                <div class="col-md-6">
+        <label for="caja_num_control" class="form-label">Número de Control</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="caja_num_control" 
+            name="caja_num_control" 
+            placeholder="Solo números"
+            value="<?= $num ?>" 
+            required readonly>
+        <div class="text-danger"><?= $_SESSION['error_nc'] ?? '' ?></div>
                     </div>
 
                     <div class="col-md-6">
