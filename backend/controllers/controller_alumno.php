@@ -229,6 +229,31 @@ class AlumnoDAO {
         return $carreras;
   
     }
+    public function obtenerAlumnoPorNumControl2($numControl) {
+        // Crear una nueva instancia de conexión
+        $dbConexion = new ConexionBDEscuela();
+        $conexion = $dbConexion->getConexion();
+    
+        // Sanitizar el número de control para evitar inyecciones SQL
+        $numControl = mysqli_real_escape_string($conexion, $numControl);
+    
+        // Construir y ejecutar la consulta
+        $query = "SELECT * FROM vista_informacion_alumno_calif WHERE Numero_Control = '$numControl'";
+        $resultado = mysqli_query($conexion, $query);
+    
+        if (!$resultado) {
+            die('Error al ejecutar la consulta: ' . mysqli_error($conexion));
+        }
+    
+        // Verificar si hay resultados
+        if (mysqli_num_rows($resultado) > 0) {
+            return mysqli_fetch_assoc($resultado);
+        } else {
+            return null; // No se encontró el alumno
+        }
+    }
+    
+
     public function obtenerAlumnoPorNumeroDeControl($numeroDeControl) {
         $sql = "SELECT * FROM alumno WHERE Num_Control = '$numeroDeControl'";
         $res = mysqli_query($this->conexion->getConexion(), $sql);
@@ -249,6 +274,8 @@ class AlumnoDAO {
         }
         return null; // Devuelve null si no se encuentra el alumno
     }
+
+    
     public function obtenerIdCarreraPorAbreviatura($abreviatura) {
         $sql = "SELECT Id_carrera FROM carrera WHERE TRIM(LOWER(abreviatura)) = TRIM(LOWER('$abreviatura'))";
         $result = mysqli_query($this->conexion->getConexion(), $sql);

@@ -89,7 +89,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <td>" . (isset($fila['Tutor']) ? $fila['Tutor'] : 'Sin tutor asignado') . "</td>
                     <td>" . (isset($fila['enRiesgo']) ? $fila['enRiesgo'] : 'No') . "</td>
                     <td class='action-buttons'>
-                        <a href='#' class='detalle btn btn-info btn-sm'>Detalle</a>
+                        <a href='detalle_alumno.php?nc=" . urlencode($fila['Num_Control']) . "' target='_blank' class='detalle btn btn-info btn-sm'>Detalle</a>
                         <a href='#modalEditar' class='editar btn btn-warning btn-sm' data-bs-toggle='modal'
                         data-control='{$fila['Num_Control']}'
                         data-nombre='{$fila['Nombre']}'

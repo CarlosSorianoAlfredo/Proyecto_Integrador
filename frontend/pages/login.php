@@ -8,6 +8,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/style_login.css">
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfXUJYqAAAAAGwoAAiLTXXbvhagcjNCWwusY5yR"></script>
+    <script>
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6LfXUJYqAAAAAGwoAAiLTXXbvhagcjNCWwusY5yR', { action: 'login' }).then(function (token) {
+                document.getElementById('recaptchaResponse').value = token;
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="container">
@@ -33,6 +41,7 @@
                         <label for="exampleInputPassword1" class="form-label">Contraseña</label>
                         <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Contraseña" name="caja_password" required>
                     </div>
+                    <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
                     <div class="form-group form-check mb-3">
                         <input type="checkbox" class="form-check-input" id="exampleCheck1">
                         <label class="form-check-label" for="exampleCheck1">Recuérdame</label>
