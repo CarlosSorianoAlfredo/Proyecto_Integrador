@@ -79,30 +79,44 @@ if (session_status() === PHP_SESSION_NONE) {
         
         while ($fila = mysqli_fetch_assoc($datos)) {
             echo "<tr>
-                    <td>{$fila['Num_Control']}</td>
-                    <td>{$fila['Nombre']}</td>
-                    <td>{$fila['Primer_Apellido']}</td>
-                    <td>{$fila['Segundo_Apellido']}</td>
-                    <td>{$fila['Fecha_Nacimiento']}</td>
-                    <td>{$fila['Semestre']}</td>
-                    <td>" . (isset($fila['Carrera']) ? $fila['Carrera'] : 'Sin carrera asignada') . "</td>
-                    <td>" . (isset($fila['Tutor']) ? $fila['Tutor'] : 'Sin tutor asignado') . "</td>
-                    <td>" . (isset($fila['enRiesgo']) ? $fila['enRiesgo'] : 'No') . "</td>
-                    <td class='action-buttons'>
-                        <a href='detalle_alumno.php?nc=" . urlencode($fila['Num_Control']) . "' target='_blank' class='detalle btn btn-info btn-sm'>Detalle</a>
-                        <a href='#modalEditar' class='editar btn btn-warning btn-sm' data-bs-toggle='modal'
-                        data-control='{$fila['Num_Control']}'
-                        data-nombre='{$fila['Nombre']}'
-                        data-primer-ap='{$fila['Primer_Apellido']}'
-                        data-segundo-ap='{$fila['Segundo_Apellido']}'
-                        data-fecha='{$fila['Fecha_Nacimiento']}'
-                        data-semestre='{$fila['Semestre']}'
-                        data-carrera='" . (isset($fila['Carrera']) ? $fila['Carrera'] : '') . "'
-                        data-tutor-id='" . (isset($fila['Tutor_id']) ? $fila['Tutor_id'] : '') . "'
-                        data-en-riesgo='" . (isset($fila['enRiesgo']) ? $fila['enRiesgo'] : 'No') . "'>Editar</a>
-                        <a href='../../backend/controllers/procesar_bajas.php?nc={$fila['Num_Control']}' class='eliminar btn btn-danger btn-sm'>Eliminar</a>
-                    </td>
-                  </tr>";
+            <td>{$fila['Num_Control']}</td>
+            <td>{$fila['Nombre']}</td>
+            <td>{$fila['Primer_Apellido']}</td>
+            <td>{$fila['Segundo_Apellido']}</td>
+            <td>{$fila['Fecha_Nacimiento']}</td>
+            <td>{$fila['Semestre']}</td>
+            <td>" . (isset($fila['Carrera']) ? $fila['Carrera'] : 'Sin carrera asignada') . "</td>
+            <td>" . (isset($fila['Tutor']) ? $fila['Tutor'] : 'Sin tutor asignado') . "</td>
+            <td>" . (isset($fila['enRiesgo']) ? $fila['enRiesgo'] : 'No') . "</td>
+            <td class='action-buttons'>
+                <a href='detalle_alumno.php?nc=" . urlencode($fila['Num_Control']) . "' target='_blank' class='detalle btn btn-info btn-sm'>Detalle</a>
+                <a href='#modalEditar' class='editar btn btn-warning btn-sm' data-bs-toggle='modal'
+                data-control='{$fila['Num_Control']}'
+                data-nombre='{$fila['Nombre']}'
+                data-primer-ap='{$fila['Primer_Apellido']}'
+                data-segundo-ap='{$fila['Segundo_Apellido']}'
+                data-fecha='{$fila['Fecha_Nacimiento']}'
+                data-semestre='{$fila['Semestre']}'
+                data-carrera='" . (isset($fila['Carrera']) ? $fila['Carrera'] : '') . "'
+                data-tutor-id='" . (isset($fila['Tutor_id']) ? $fila['Tutor_id'] : '') . "'
+                data-en-riesgo='" . (isset($fila['enRiesgo']) ? $fila['enRiesgo'] : 'No') . "'>Editar</a>
+                <a href='#' 
+                class='eliminar btn btn-danger btn-sm'
+                data-control='{$fila['Num_Control']}'
+                data-nombre='{$fila['Nombre']}'
+                data-primer-ap='{$fila['Primer_Apellido']}'
+                data-segundo-ap='{$fila['Segundo_Apellido']}'
+                data-fecha='{$fila['Fecha_Nacimiento']}'
+                data-semestre='{$fila['Semestre']}'
+                data-carrera='" . (isset($fila['Carrera']) ? $fila['Carrera'] : '') . "'
+                data-tutor-id='" . (isset($fila['Tutor_id']) ? $fila['Tutor_id'] : '') . "'
+                data-en-riesgo='" . (isset($fila['enRiesgo']) ? $fila['enRiesgo'] : 'No') . "'>
+                Eliminar
+                </a>
+            </td>
+        </tr>";
+        
+        
         }
 
         echo '</tbody></table>';
@@ -227,6 +241,49 @@ $(document).on('click', '.editar', function () {
     });
 });
 
+$(document).on('click', '.eliminar', function (e) {
+    e.preventDefault();
+
+    // Capturar los datos del alumno desde los atributos data-*.
+    const alumno = {
+        numControl: $(this).data('control'),
+        nombre: $(this).data('nombre'),
+        primerAp: $(this).data('primer-ap'),
+        segundoAp: $(this).data('segundo-ap'),
+        fecha: $(this).data('fecha'),
+        semestre: $(this).data('semestre'),
+        carrera: $(this).data('carrera'),
+        tutorId: $(this).data('tutor-id'),
+        enRiesgo: $(this).data('en-riesgo')
+    };
+
+    // Enviar los datos del alumno al backend usando POST.
+    $.post('../../backend/controllers/guardar_memento.php', alumno, function (response) {
+        // Agregar el botón de restaurar si la operación fue exitosa.
+        const restoreButton = $(`
+            <div id="restore-alert" class="alert alert-warning">
+                Alumno eliminado. 
+                <button id="restore-button" class="btn btn-success btn-sm">Deshacer</button>
+            </div>
+        `);
+        $('body').prepend(restoreButton);
+
+        // Restaurar el alumno al hacer clic en el botón.
+        $('#restore-button').on('click', function () {
+            $.post('../../backend/controllers/restaurar_memento.php', function () {
+                alert('Alumno restaurado exitosamente.');
+                $('#restore-alert').remove();
+            });
+        });
+
+        // Ocultar el botón después de 10 segundos.
+        setTimeout(() => {
+            $('#restore-alert').fadeOut('slow', function () {
+                $(this).remove();
+            });
+        }, 10000);
+    });
+});
 
 
     $(document).ready(function () {
