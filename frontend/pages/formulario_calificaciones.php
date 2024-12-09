@@ -3,7 +3,6 @@ include_once('../../backend/controllers/controller_asignatura.php');
 include_once('../../backend/controllers/controller_alumno.php');
 session_start();
 
-
 include '../../backend/scripts/auth.php';
 if (empty($_GET['numeroDeControl'])) {
     $_SESSION['mensaje'] = "No se especificó un número de control.";
@@ -24,7 +23,7 @@ if (!$alumno) {
 
 // Obtener asignaturas y calificaciones del alumno
 $asignaturaDAO = new AsignaturaDAO();
-$asignaturas = $asignaturaDAO->obtenerAsignaturasPorCarreraYSemestre($alumno->getCarrera(), $alumno->getSemestre());
+$asignaturas = $asignaturaDAO->obtenerAsignaturasPorCarreraYSemestre($alumno->getCarrera, $alumno->getSemestre);
 
 $calificacionesRegistradas = $alumnoDAO->obtenerCalificacionesPorAlumno($numeroDeControl);
 $calificacionesMap = [];
@@ -55,7 +54,7 @@ foreach ($calificacionesRegistradas as $calificacion) {
     <?php include_once('menu_principal.php'); ?>
 
     <div class="container mt-5">
-        <h2>Asignar Calificaciones a <?= htmlspecialchars($alumno->getNombre() . " " . $alumno->getPrimerAp()) ?></h2>
+        <h2>Asignar Calificaciones a <?= htmlspecialchars($alumno->getNombre . " " . $alumno->getPrimerAp) ?></h2>
 
         <!-- Mostrar mensajes -->
         <?php if (isset($_SESSION['mensaje'])): ?>

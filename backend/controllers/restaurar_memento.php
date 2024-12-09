@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../backend/scripts/database_connection.php';
+include_once('../../database/conexion_bd_proyecto.php');
 
 if (isset($_SESSION['ultimo_eliminado'])) {
     $alumno = $_SESSION['ultimo_eliminado'];

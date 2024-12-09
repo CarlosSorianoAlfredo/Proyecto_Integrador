@@ -10,30 +10,17 @@ class TutorDAO {
     }
 
     public function obtenerTutorPorId($id_tutor) {
-        $sql = "SELECT id_tutor, nombre, primer_apellido, segundo_apellido, titulo FROM tutor WHERE id_tutor = ?";
+        $sql = "SELECT id_tutor, nombre, primer_apellido, segundo_apellido, titulo FROM tutor WHERE id_tutor = :id_tutor";
         $stmt = $this->conexion->getConexion()->prepare($sql);
-        $stmt->bind_param("i", $id_tutor);
+        $stmt->bindParam(':id_tutor', $id_tutor, PDO::PARAM_INT);
         $stmt->execute();
-        $result = $stmt->get_result();
-    
-        return $result->fetch_assoc();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    // Función para obtener los tutores con el título
+
     public function obtenerTutores() {
-        $sql = "SELECT Id_tutor, Nombre, Primer_Apellido, Segundo_Apellido, Titulo 
-                FROM tutor";
-        
-        $res = mysqli_query($this->conexion->getConexion(), $sql);
-
-        $tutores = [];
-
-        // Recorrer las filas obtenidas de la consulta
-        while ($fila = mysqli_fetch_assoc($res)) {
-            $tutores[] = $fila;
-        }
-
-        // Devolver el arreglo con los tutores
-        return $tutores;
+        $sql = "SELECT id_tutor, nombre, primer_apellido, segundo_apellido, titulo FROM tutor";
+        $stmt = $this->conexion->getConexion()->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>

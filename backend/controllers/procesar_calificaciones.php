@@ -29,6 +29,7 @@ foreach ($calificaciones as $idAsignatura => $puntaje) {
     }
 }
 
+
 if (!empty($nuevasCalificaciones)) {
     foreach ($nuevasCalificaciones as $idAsignatura => $puntaje) {
         $calificacionDAO->guardarCalificacion($numeroDeControl, $idAsignatura, $puntaje); 

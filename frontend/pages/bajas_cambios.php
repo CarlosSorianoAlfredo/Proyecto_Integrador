@@ -56,10 +56,8 @@ if (session_status() === PHP_SESSION_NONE) {
     $datos = $alumnoDAO->mostrarAlumnos('');
     $tutores = $alumnoDAO->obtenerTutores();
     $carreras = $alumnoDAO->obtenerCarreras();
-    
 
-
-    if (mysqli_num_rows($datos) > 0) {
+    if (count($datos) > 0) { // Usamos count() ya que fetchAll() devuelve un array
         echo "<table class='table table-striped'>";
         echo '<thead>
                 <tr>
@@ -77,52 +75,50 @@ if (session_status() === PHP_SESSION_NONE) {
               </thead>
               <tbody>';
         
-        while ($fila = mysqli_fetch_assoc($datos)) {
+        foreach ($datos as $fila) {
             echo "<tr>
-            <td>{$fila['Num_Control']}</td>
-            <td>{$fila['Nombre']}</td>
-            <td>{$fila['Primer_Apellido']}</td>
-            <td>{$fila['Segundo_Apellido']}</td>
-            <td>{$fila['Fecha_Nacimiento']}</td>
-            <td>{$fila['Semestre']}</td>
-            <td>" . (isset($fila['Carrera']) ? $fila['Carrera'] : 'Sin carrera asignada') . "</td>
-            <td>" . (isset($fila['Tutor']) ? $fila['Tutor'] : 'Sin tutor asignado') . "</td>
-            <td>" . (isset($fila['enRiesgo']) ? $fila['enRiesgo'] : 'No') . "</td>
-            <td class='action-buttons'>
-                <a href='detalle_alumno.php?nc=" . urlencode($fila['Num_Control']) . "' target='_blank' class='detalle btn btn-info btn-sm'>Detalle</a>
-                <a href='#modalEditar' class='editar btn btn-warning btn-sm' data-bs-toggle='modal'
-                data-control='{$fila['Num_Control']}'
-                data-nombre='{$fila['Nombre']}'
-                data-primer-ap='{$fila['Primer_Apellido']}'
-                data-segundo-ap='{$fila['Segundo_Apellido']}'
-                data-fecha='{$fila['Fecha_Nacimiento']}'
-                data-semestre='{$fila['Semestre']}'
-                data-carrera='" . (isset($fila['Carrera']) ? $fila['Carrera'] : '') . "'
-                data-tutor-id='" . (isset($fila['Tutor_id']) ? $fila['Tutor_id'] : '') . "'
-                data-en-riesgo='" . (isset($fila['enRiesgo']) ? $fila['enRiesgo'] : 'No') . "'>Editar</a>
-                <a href='#' 
-                class='eliminar btn btn-danger btn-sm'
-                data-control='{$fila['Num_Control']}'
-                data-nombre='{$fila['Nombre']}'
-                data-primer-ap='{$fila['Primer_Apellido']}'
-                data-segundo-ap='{$fila['Segundo_Apellido']}'
-                data-fecha='{$fila['Fecha_Nacimiento']}'
-                data-semestre='{$fila['Semestre']}'
-                data-carrera='" . (isset($fila['Carrera']) ? $fila['Carrera'] : '') . "'
-                data-tutor-id='" . (isset($fila['Tutor_id']) ? $fila['Tutor_id'] : '') . "'
-                data-en-riesgo='" . (isset($fila['enRiesgo']) ? $fila['enRiesgo'] : 'No') . "'>
-                Eliminar
-                </a>
-            </td>
-        </tr>";
-        
-        
+                    <td>{$fila['Num_Control']}</td>
+                    <td>{$fila['Nombre']}</td>
+                    <td>{$fila['Primer_Apellido']}</td>
+                    <td>{$fila['Segundo_Apellido']}</td>
+                    <td>{$fila['Fecha_Nacimiento']}</td>
+                    <td>{$fila['Semestre']}</td>
+                    <td>" . (!empty($fila['Carrera']) ? $fila['Carrera'] : 'Sin carrera') . "</td>
+                    <td>" . (!empty($fila['Tutor']) ? $fila['Tutor'] . " " . $fila['TutorPrimerAp'] . " " . $fila['TutorSegundoAp'] : 'Sin tutor asignado') . "</td>
+                    <td>" . ($fila['enRiesgo'] === 'Si' ? 'Si' : 'No') . "</td>
+                    <td class='action-buttons'>
+                        <a href='detalle_alumno.php?nc=" . urlencode($fila['Num_Control']) . "' class='detalle btn btn-info btn-sm'>Detalle</a>
+                        <a href='#modalEditar' class='editar btn btn-warning btn-sm' data-bs-toggle='modal'
+                            data-control='{$fila['Num_Control']}'
+                            data-nombre='{$fila['Nombre']}'
+                            data-primer-ap='{$fila['Primer_Apellido']}'
+                            data-segundo-ap='{$fila['Segundo_Apellido']}'
+                            data-fecha='{$fila['Fecha_Nacimiento']}'
+                            data-semestre='{$fila['Semestre']}'
+                            data-carrera='" . (!empty($fila['Carrera']) ? $fila['Carrera'] : '') . "'
+                           data-en-riesgo='" . ($fila['enRiesgo'] === 'Si' ? 'Si' : 'No') ."'>Editar</a>
+                        <a href='#' class='eliminar btn btn-danger btn-sm' 
+                            data-control='{$fila['Num_Control']}'
+                            data-nombre='{$fila['Nombre']}'
+                            data-primer-ap='{$fila['Primer_Apellido']}'
+                            data-segundo-ap='{$fila['Segundo_Apellido']}'
+                            data-fecha='{$fila['Fecha_Nacimiento']}'
+                            data-semestre='{$fila['Semestre']}'
+                            data-carrera='" . (!empty($fila['Carrera']) ? $fila['Carrera'] : '') . "'
+                            data-tutor-id='" . (!empty($fila['Tutor_id']) ? $fila['Tutor_id'] : '') . "'
+                            data-en-riesgo='" . ($fila['enRiesgo'] == '1' ? 'Sí' : 'No') . "'>
+                            Eliminar
+                        </a>
+                    </td>
+                  </tr>";
         }
-
+        
         echo '</tbody></table>';
     } else {
         echo "<p>No hay datos disponibles.</p>";
     }
+    
+
     ?>
 </div>
 <!-- Modal de Edición -->
@@ -162,13 +158,13 @@ if (session_status() === PHP_SESSION_NONE) {
                     <div class="mb-2">
                         <label for="carrera" class="form-label">Carrera</label>
                         <select class="form-select form-control-sm" id="carrera" name="carrera">
-                            <option value="" disabled selected>Seleccione una carrera</option>
-                            <option value="ISC">Ingeniería en Sistemas Computacionales</option>
-                            <option value="IM">Ingeniería en Mecatrónica</option>
-                            <option value="IIA">Ingeniería en Industrias Alimentarias</option>
-                            <option value="LA">Licenciatura en Administración de Empresas</option>
-                            <option value="LC">Licenciatura en Contaduría Pública</option>
+                            <option value="ISC">ISC</option>
+                            <option value="IM">IM</option>
+                            <option value="IIA">IIA</option>
+                            <option value="LA">LA</option>
+                            <option value="LC">LC</option>
                         </select>
+
                     </div>
 
                     <div class="mb-2">
@@ -185,9 +181,9 @@ if (session_status() === PHP_SESSION_NONE) {
                     <div class="mb-2">
                         <label for="enRiesgo" class="form-label">En Riesgo</label>
                         <select class="form-select form-control-sm" id="enRiesgo" name="enRiesgo">
-                            <option value="No">No</option>
-                            <option value="Sí">Sí</option>
-                        </select>
+                    <option value="No">No</option>
+                    <option value="Si">Si</option>
+                </select>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -220,6 +216,8 @@ $(document).on('click', '.editar', function () {
     const tutorId = $(this).data('tutor-id') || ''; // Asegúrate de que sea el ID del tutor
     const enRiesgo = $(this).data('en-riesgo');
 
+
+
     // Asignar los valores a los campos del modal
     $('#numControl').val(numControl);
     $('#nombre').val(nombre);
@@ -229,7 +227,7 @@ $(document).on('click', '.editar', function () {
     $('#semestre').val(semestre);
     $('#carrera').val(carrera);
     $('#tutor').val(tutorId); // Seleccionar tutor por ID
-    $('#enRiesgo').val(enRiesgo);
+    $('#enRiesgo').val(enRiesgo === 'Si' ? 'Si' : 'No');
 
     $('#tutor option').each(function () {
         const tutorText = $(this).text().toLowerCase();
@@ -243,8 +241,7 @@ $(document).on('click', '.editar', function () {
 
 $(document).on('click', '.eliminar', function (e) {
     e.preventDefault();
-
-    // Capturar los datos del alumno desde los atributos data-*.
+    console.log("Botón de eliminar presionado");
     const alumno = {
         numControl: $(this).data('control'),
         nombre: $(this).data('nombre'),
@@ -257,9 +254,7 @@ $(document).on('click', '.eliminar', function (e) {
         enRiesgo: $(this).data('en-riesgo')
     };
 
-    // Enviar los datos del alumno al backend usando POST.
-    $.post('../../backend/controllers/guardar_memento.php', alumno, function (response) {
-        // Agregar el botón de restaurar si la operación fue exitosa.
+    $.post('../../backend/controllers/guardar_memento.php', alumno, function () {
         const restoreButton = $(`
             <div id="restore-alert" class="alert alert-warning">
                 Alumno eliminado. 
@@ -268,20 +263,12 @@ $(document).on('click', '.eliminar', function (e) {
         `);
         $('body').prepend(restoreButton);
 
-        // Restaurar el alumno al hacer clic en el botón.
         $('#restore-button').on('click', function () {
             $.post('../../backend/controllers/restaurar_memento.php', function () {
                 alert('Alumno restaurado exitosamente.');
                 $('#restore-alert').remove();
             });
         });
-
-        // Ocultar el botón después de 10 segundos.
-        setTimeout(() => {
-            $('#restore-alert').fadeOut('slow', function () {
-                $(this).remove();
-            });
-        }, 10000);
     });
 });
 
@@ -294,7 +281,5 @@ $(document).on('click', '.eliminar', function (e) {
         }, 5000);
     });
 </script>
-
-
 </body>
 </html>

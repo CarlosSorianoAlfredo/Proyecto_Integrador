@@ -81,20 +81,23 @@ $alumno = new Alumno(
 
 // Registrar el alumno en la base de datos
 $alumnoDAO = new AlumnoDAO();
-$res = $alumnoDAO->agregarAlumno($alumno);
-
-if ($res) {
-    $_SESSION['mensaje'] = "Registro AGREGADO Correctamente!";
-    // Limpiar errores y datos temporales de sesión
-    unset(
-        $_SESSION['error_nc'], $_SESSION['error_nombre'], $_SESSION['error_primerAp'], 
-        $_SESSION['error_segundoAp'], $_SESSION['error_fechaNacimiento'], $_SESSION['error_semestre'], 
-        $_SESSION['error_carrera'], $_SESSION['nc'], $_SESSION['nombre'], $_SESSION['primerAp'], 
-        $_SESSION['segundoAp'], $_SESSION['fechaNacimiento'], $_SESSION['semestre'], $_SESSION['carrera'], 
-        $_SESSION['id_tutor']
-    );
-} else {
-    $_SESSION['mensaje'] = "Error al agregar el registro.";
+try {
+    $res = $alumnoDAO->agregarAlumno($alumno); // Este método debe estar implementado con PDO
+    if ($res) {
+        $_SESSION['mensaje'] = "Registro AGREGADO Correctamente!";
+        // Limpiar errores y datos temporales de sesión
+        unset(
+            $_SESSION['error_nc'], $_SESSION['error_nombre'], $_SESSION['error_primerAp'], 
+            $_SESSION['error_segundoAp'], $_SESSION['error_fechaNacimiento'], $_SESSION['error_semestre'], 
+            $_SESSION['error_carrera'], $_SESSION['nc'], $_SESSION['nombre'], $_SESSION['primerAp'], 
+            $_SESSION['segundoAp'], $_SESSION['fechaNacimiento'], $_SESSION['semestre'], $_SESSION['carrera'], 
+            $_SESSION['id_tutor']
+        );
+    } else {
+        $_SESSION['mensaje'] = "Error al agregar el registro.";
+    }
+} catch (Exception $e) {
+    $_SESSION['mensaje'] = "Error: " . $e->getMessage();
 }
 
 // Redirigir al formulario

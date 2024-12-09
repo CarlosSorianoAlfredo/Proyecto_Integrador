@@ -4,10 +4,11 @@ include_once("../models/model_usuario.php");
 
 class UsuarioDAO {
     private $conexion;
-
-    public function __construct() {   
-        $this->conexion = new ConexionBDUsuarios(); 
+     
+    public function __construct() {
+        $this->conexion = ConexionBDEscuela::getInstancia()->getConexion();
     }
+
     //===========================METODOS ABCC(CRUD)====================================
 
     //----------------------------ALTAS---------------------------------

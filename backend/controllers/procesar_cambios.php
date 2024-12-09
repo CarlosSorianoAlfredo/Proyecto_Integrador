@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fechaNacimiento = $_POST['fechaNacimiento'] ?? null;
     $semestre = $_POST['semestre'] ?? null;
     $carrera_nombre = $_POST['carrera'] ?? null; // Nombre de la carrera recibido
-    $enRiesgo = $_POST['enRiesgo'] ?? null;
+    $enRiesgo = ($_POST['enRiesgo'] === 'Si') ? 'Si' : 'No';
     $tutor_nombre_completo = $_POST['tutor'] ?? null; // Nombre completo del tutor recibido
 
     // Validar datos básicos

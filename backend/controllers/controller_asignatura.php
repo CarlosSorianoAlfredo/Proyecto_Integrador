@@ -10,16 +10,15 @@ class AsignaturaDAO {
     public function obtenerAsignaturasPorCarreraYSemestre($idCarrera, $semestre) {
         $sql = "SELECT ID_asignatura, Nombre_asignatura 
                 FROM asignatura 
-                WHERE Id_carrera = $idCarrera AND Semestre = $semestre";
-    
-        $res = mysqli_query($this->conexion->getConexion(), $sql);
-    
-        $asignaturas = [];
-        while ($fila = mysqli_fetch_assoc($res)) {
-            $asignaturas[] = $fila;
-        }
+                WHERE Id_carrera = :idCarrera AND Semestre = :semestre";
+        
+        $stmt = $this->conexion->getConexion()->prepare($sql);
+        $stmt->bindParam(':idCarrera', $idCarrera, PDO::PARAM_INT);
+        $stmt->bindParam(':semestre', $semestre, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $asignaturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $asignaturas;
     }
-    
 }
 ?>

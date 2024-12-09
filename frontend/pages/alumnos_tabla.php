@@ -15,10 +15,11 @@ $filtros = [
     'enRiesgo' => $_POST['enRiesgo'] ?? ''
 ];
 
+// Llamamos al método para obtener los alumnos filtrados
 $resultado = $alumnoDAO->mostrarAlumnosFiltros($filtros);
 
-if ($resultado && $resultado->num_rows > 0): 
-    while ($fila = $resultado->fetch_assoc()): ?>
+if ($resultado && $resultado->rowCount() > 0): 
+    while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)): ?>
         <tr>
             <td><?php echo htmlspecialchars($fila['Num_Control'] ?? ''); ?></td>
             <td><?php echo htmlspecialchars($fila['Nombre'] ?? ''); ?></td>

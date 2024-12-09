@@ -1,331 +1,330 @@
 <?php
 include_once('../../database/conexion_bd_proyecto.php');
-include_once(__DIR__ . '/../models/model_alumno.php');
 
 class AlumnoDAO {
     private $conexion;
 
-    public function __construct() {   
-        $this->conexion = new ConexionBDEscuela(); 
+   
+    public function __construct() {
+        $this->conexion = ConexionBDEscuela::getInstancia()->getConexion();
     }
 
-    //===========================METODOS ABCC(CRUD)====================================
-
-    //----------------------------ALTAS---------------------------------
+    //=========================== METODOS ABCC (CRUD) ==========================
+    //---------------------------- ALTAS ---------------------------------
     public function agregarAlumno($alumno) {
-        $numControl = $alumno->getNumControl();
-        $nombre = $alumno->getNombre();
-        $primerAp = $alumno->getPrimerAp();
-        $segundoAp = $alumno->getSegundoAp();
-        $fechaNacimiento = $alumno->getFechaNacimiento();
-        $semestre = $alumno->getSemestre();
-        $carrera = $alumno->getCarrera();
-        $enRiesgo = $alumno->getEnRiesgo();
-        $idTutor = $alumno->getTutor(); 
-
         $sql = "INSERT INTO alumno (Num_Control, Nombre, Primer_Apellido, Segundo_Apellido, Fecha_Nacimiento, Semestre, Id_carrera, enRiesgo, Id_tutor) 
-        VALUES ('$numControl', '$nombre', '$primerAp', '$segundoAp', '$fechaNacimiento', $semestre, $carrera, '$enRiesgo', " . ($idTutor ? $idTutor : "NULL") . ")";
+                VALUES (:numControl, :nombre, :primerAp, :segundoAp, :fechaNacimiento, :semestre, :carrera, :enRiesgo, :idTutor)";
+         $stmt = $this->conexion->prepare($sql);
 
-    
-        $res = mysqli_query($this->conexion->getConexion(), $sql);
-        return $res;
+        $stmt->bindValue(':numControl', $alumno->getNumControl());
+        $stmt->bindValue(':nombre', $alumno->getNombre());
+        $stmt->bindValue(':primerAp', $alumno->getPrimerAp());
+        $stmt->bindValue(':segundoAp', $alumno->getSegundoAp());
+        $stmt->bindValue(':fechaNacimiento', $alumno->getFechaNacimiento());
+        $stmt->bindValue(':semestre', $alumno->getSemestre(), PDO::PARAM_INT);
+        $stmt->bindValue(':carrera', $alumno->getCarrera(), PDO::PARAM_INT);
+        $stmt->bindValue(':enRiesgo', $alumno->getEnRiesgo(), PDO::PARAM_STR);
+        $stmt->bindValue(':idTutor', $alumno->getTutor(), PDO::PARAM_INT);
+
+        return $stmt->execute();
     }
 
-    //----------------------------BAJAS---------------------------------
-    public function eliminarAlumno($nc) {
-        $sql = "DELETE FROM alumno WHERE Num_Control = '$nc'";
-        $res = mysqli_query($this->conexion->getConexion(), $sql);
-        return $res;
+    //---------------------------- BAJAS ---------------------------------
+    public function eliminarAlumno($numControl) {
+        $sql = "DELETE FROM alumno WHERE Num_Control = :numControl";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bindValue(':numControl', $numControl);
+        return $stmt->execute();
     }
 
-    //----------------------------CAMBIOS---------------------------------
+    //---------------------------- CAMBIOS ---------------------------------
     public function actualizarAlumno($alumno) {
-        $numControl = $alumno->getNumControl();
+        $sql = "
+            UPDATE alumno 
+            SET 
+                Nombre = :nombre,
+                Primer_Apellido = :primerAp,
+                Segundo_Apellido = :segundoAp,
+                Fecha_Nacimiento = :fechaNacimiento,
+                Semestre = :semestre,
+                Id_carrera = :idCarrera,
+                Id_tutor = :idTutor,
+                enRiesgo = :enRiesgo
+            WHERE 
+                Num_Control = :numControl";
+        
+        $stmt = $this->conexion->prepare($sql);
+    
+        // Almacenar los valores en variables
         $nombre = $alumno->getNombre();
         $primerAp = $alumno->getPrimerAp();
         $segundoAp = $alumno->getSegundoAp();
         $fechaNacimiento = $alumno->getFechaNacimiento();
         $semestre = $alumno->getSemestre();
-        $carrera = $alumno->getCarrera();
-        $enRiesgo = $alumno->getEnRiesgo();
-        $idTutor = $alumno->getTutor(); // Tutor puede ser null
+        $idCarrera = $alumno->getCarrera(); 
+        $idTutor = $alumno->getTutor();
+        $enRiesgo = $alumno->getEnRiesgo(); // 'Si' o 'No'
+        $numControl = $alumno->getNumControl();
     
-        // Construir la consulta SQL
-        $sql = "UPDATE alumno SET 
-                    Nombre = '$nombre', 
-                    Primer_Apellido = '$primerAp', 
-                    Segundo_Apellido = '$segundoAp', 
-                    Fecha_Nacimiento = '$fechaNacimiento', 
-                    Semestre = $semestre, 
-                    Id_carrera = '$carrera', 
-                    enRiesgo = '$enRiesgo', 
-                    Id_tutor = " . ($idTutor ? $idTutor : "NULL") . " 
-                WHERE Num_Control = '$numControl'";
+        // Usar las variables para bindParam
+        $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+        $stmt->bindParam(':primerAp', $primerAp, PDO::PARAM_STR);
+        $stmt->bindParam(':segundoAp', $segundoAp, PDO::PARAM_STR);
+        $stmt->bindParam(':fechaNacimiento', $fechaNacimiento, PDO::PARAM_STR);
+        $stmt->bindParam(':semestre', $semestre, PDO::PARAM_INT);
+        $stmt->bindParam(':idCarrera', $idCarrera, PDO::PARAM_INT);
+        $stmt->bindParam(':idTutor', $idTutor, PDO::PARAM_INT);
+        
+        // Actualización: Manejar 'enRiesgo' como cadena
+        $stmt->bindParam(':enRiesgo', $enRiesgo, PDO::PARAM_STR); 
     
-        // Registrar la consulta para depuración (opcional)
-        error_log("Consulta SQL: $sql");
+        $stmt->bindParam(':numControl', $numControl, PDO::PARAM_INT);
     
-        // Ejecutar la consulta
-        $res = mysqli_query($this->conexion->getConexion(), $sql);
-    
-        // Verificar si hubo errores en la ejecución
-        if (!$res) {
-            error_log("Error en la consulta SQL: " . mysqli_error($this->conexion->getConexion()));
-            return false; // O lanza una excepción si es necesario
-        }
-        return $res;
+        return $stmt->execute();
     }
     
-    
-    //----------------------------CONSULTAS---------------------------------
-    /*public function mostrarAlumnos($filtro = "") {
-        $sql = "SELECT * FROM alumno";
+
+    public function obtenerAlumnoPorNumControl2($numControl) {
+        try {
+            // Consulta SQL para obtener la información del alumno
+            $sql = "
+                SELECT
+                    Numero_Control,
+                    Nombre_Alumno,
+                    Primer_Apellido_Alumno,
+                    Segundo_Apellido_Alumno,
+                    Fecha_Nacimiento,
+                    Semestre_Alumno,
+                    Carrera,
+                    Tutor,
+                    Materias_y_Calificaciones
+                FROM vista_informacion_alumno_calif
+                WHERE Numero_Control = :numControl
+            ";
+
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':numControl', $numControl, PDO::PARAM_STR);
+
+            // Ejecutar y obtener los datos
+            $stmt->execute();
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $resultado; // Devuelve un array asociativo con los datos del alumno
+        } catch (PDOException $e) {
+            // Manejar errores
+            error_log("Error en obtenerAlumnoPorNumControl2: " . $e->getMessage());
+            return null;
+        }
+    }
+    //---------------------------- CONSULTAS ---------------------------------
+    public function mostrarAlumnos($filtro = '') {
+        $sql = "
+            SELECT 
+                a.Num_Control, 
+                a.Nombre, 
+                a.Primer_Apellido, 
+                a.Segundo_Apellido, 
+                a.Fecha_Nacimiento, 
+                a.Semestre, 
+                CASE
+                    WHEN c.Nombre_carrera = 'Ingeniería en Sistemas Computacionales' THEN 'ISC'
+                    WHEN c.Nombre_carrera = 'Ingeniería en Mecatrónica' THEN 'IM'
+                    WHEN c.Nombre_carrera = 'Ingeniería en Industrias Alimentarias' THEN 'IIA'
+                    WHEN c.Nombre_carrera = 'Licenciatura en Administración de Empresas' THEN 'LA'
+                    WHEN c.Nombre_carrera = 'Licenciatura en Contaduría Pública' THEN 'LC'
+                    ELSE 'Sin carrera'
+                END AS Carrera,
+                t.nombre AS Tutor, 
+                t.primer_apellido AS TutorPrimerAp, 
+                t.segundo_apellido AS TutorSegundoAp, 
+                a.enRiesgo
+            FROM 
+                alumno a
+            LEFT JOIN 
+                carrera c ON a.Id_carrera = c.Id_carrera
+            LEFT JOIN 
+                tutor t ON a.Id_tutor = t.id_tutor";
+        
         if (!empty($filtro)) {
-            $sql .= " WHERE Nombre LIKE '%" . mysqli_real_escape_string($this->conexion->getConexion(), $filtro) . "%'";
-        }
-        $res = mysqli_query($this->conexion->getConexion(), $sql);
-        return $res;
-    }*/  
-        public function mostrarAlumnos($filtro = "") {
-            $sql = "SELECT 
-                        a.Num_Control, 
-                        a.Nombre, 
-                        a.Primer_Apellido, 
-                        a.Segundo_Apellido, 
-                        a.Fecha_Nacimiento, 
-                        a.Semestre, 
-                        c.abreviatura AS Carrera,  
-                        t.nombre AS Tutor, 
-                        a.enRiesgo 
-                    FROM alumno a
-                    LEFT JOIN carrera c ON a.Id_carrera = c.Id_carrera
-                    LEFT JOIN tutor t ON a.Id_tutor = t.id_tutor";
-            
-            if (!empty($filtro)) {
-                $sql .= " WHERE a.Nombre LIKE '%" . mysqli_real_escape_string($this->conexion->getConexion(), $filtro) . "%'";
-            }
-            
-            $res = mysqli_query($this->conexion->getConexion(), $sql);
-            return $res;
-        }
-        public function mostrarAlumnosFiltros($filtros) {
-            $sql = "SELECT 
-            alumno.Num_Control, 
-            alumno.Nombre, 
-            alumno.Primer_Apellido, 
-            alumno.Segundo_Apellido, 
-            alumno.Fecha_Nacimiento, 
-            alumno.Semestre, 
-            carrera.Nombre_carrera AS Carrera, 
-            CONCAT(tutor.Titulo, ' ', tutor.Nombre, ' ', tutor.Primer_Apellido, ' ', tutor.Segundo_Apellido) AS Tutor, 
-            alumno.enRiesgo AS EnRiesgo 
-        FROM alumno
-        LEFT JOIN carrera ON alumno.Id_carrera = carrera.Id_carrera
-        LEFT JOIN tutor ON alumno.Id_tutor = tutor.Id_tutor
-        WHERE 1=1";
-
-            if (!empty($filtros['numControl'])) {
-                $sql .= " AND alumno.Num_Control LIKE '" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['numControl']) . "%'";
-            }
-            if (!empty($filtros['nombre'])) {
-                $sql .= " AND alumno.Nombre LIKE '" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['nombre']) . "%'";
-            }
-            if (!empty($filtros['primerAp'])) {
-                $sql .= " AND alumno.Primer_Apellido LIKE '" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['primerAp']) . "%'";
-            }
-            if (!empty($filtros['segundoAp'])) {
-                $sql .= " AND alumno.Segundo_Apellido LIKE '" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['segundoAp']) . "%'";
-            }
-            if (!empty($filtros['fechaNacimiento'])) {
-                $sql .= " AND alumno.Fecha_Nacimiento = '" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['fechaNacimiento']) . "'";
-            }
-            if (!empty($filtros['semestre'])) {
-                $sql .= " AND alumno.Semestre = " . (int)$filtros['semestre'];
-            }
-           // Filtrar por carrera (Nombre)
-           if (!empty($filtros['carrera'])) {
-            $sql .= " AND carrera.Nombre_carrera LIKE '%" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['carrera']) . "%'";
+            $sql .= " WHERE a.Nombre LIKE :filtro OR a.Primer_Apellido LIKE :filtro";
         }
         
-
-    // Filtrar por tutor (Nombre completo)
-    if (!empty($filtros['tutor'])) {
-        $sql .= " AND CONCAT(tutor.Titulo, ' ', tutor.Nombre, ' ', tutor.Primer_Apellido, ' ', tutor.Segundo_Apellido) LIKE '%" . 
-            mysqli_real_escape_string($this->conexion->getConexion(), $filtros['tutor']) . "%'";
+        $stmt = $this->conexion->prepare($sql);
+        
+        if (!empty($filtro)) {
+            $stmt->bindValue(':filtro', "%$filtro%", PDO::PARAM_STR);
+        }
+        
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
-            if (!empty($filtros['enRiesgo'])) {
-                $sql .= " AND alumno.enRiesgo = '" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['enRiesgo']) . "'";
-            }
-            
-        
-            $res = mysqli_query($this->conexion->getConexion(), $sql);
-            if (!$res) {
-                die("Error en la consulta: " . mysqli_error($this->conexion->getConexion()));
-            }
-        
-            return $res;
-        }
-        
-        
-        
-    /*public function mostrarAlumnosFiltros($filtros) {
-        $sql = "SELECT * FROM alumno WHERE 1=1";
+    public function mostrarAlumnosFiltros($filtros) {
+        $sql = "SELECT 
+                alumno.Num_Control, 
+                alumno.Nombre, 
+                alumno.Primer_Apellido, 
+                alumno.Segundo_Apellido, 
+                alumno.Fecha_Nacimiento, 
+                alumno.Semestre, 
+                carrera.Nombre_carrera AS Carrera, 
+                CONCAT(tutor.Titulo, ' ', tutor.Nombre, ' ', tutor.Primer_Apellido, ' ', tutor.Segundo_Apellido) AS Tutor, 
+                alumno.enRiesgo AS EnRiesgo 
+            FROM alumno
+            LEFT JOIN carrera ON alumno.Id_carrera = carrera.Id_carrera
+            LEFT JOIN tutor ON alumno.Id_tutor = tutor.Id_tutor
+            WHERE 1=1";
+    
+        // Creamos un array para almacenar los parámetros de la consulta
+        $params = [];
+    
+        // Filtramos por número de control
         if (!empty($filtros['numControl'])) {
-            $sql .= " AND Num_Control LIKE '" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['numControl']) . "%'";
-        }
-        if (!empty($filtros['nombre'])) {
-            $sql .= " AND Nombre LIKE '" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['nombre']) . "%'";
-        }
-        if (!empty($filtros['primerAp'])) {
-            $sql .= " AND Primer_Apellido LIKE '" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['primerAp']) . "%'";
-        }
-        if (!empty($filtros['segundoAp'])) {
-            $sql .= " AND Segundo_Apellido LIKE '" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['segundoAp']) . "%'";
-        }
-        if (!empty($filtros['fechaNacimiento'])) {
-            $sql .= " AND Fecha_Nacimiento = '" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['fechaNacimiento']) . "'";
-        }
-        if (!empty($filtros['semestre'])) {
-            $sql .= " AND Semestre = " . (int)$filtros['semestre'];
-        }
-        if (!empty($filtros['carrera'])) {
-            $sql .= " AND Carrera LIKE '" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['carrera']) . "%'";
-        }
-        if (!empty($filtros['enRiesgo'])) {
-            if (!empty($filtros['enRiesgo'])) {
-                $sql .= " AND EnRiesgo = '" . mysqli_real_escape_string($this->conexion->getConexion(), $filtros['enRiesgo']) . "'";
-            }
-            
-        }
-        if (!empty($filtros['idTutor'])) {
-            $sql .= " AND id_tutor = " . (int)$filtros['idTutor'];
+            $sql .= " AND alumno.Num_Control LIKE :numControl";
+            $params[':numControl'] = $filtros['numControl'] . '%';
         }
         
-        $res = mysqli_query($this->conexion->getConexion(), $sql);
-        return $res;
-    }*/
-
-    //----------------------------OBTENER TUTORES----------------------------
-    public function obtenerTutores() {
-        $sql = "SELECT id_tutor, nombre, primer_apellido,segundo_apellido,titulo FROM tutor";
-        $res = mysqli_query($this->conexion->getConexion(), $sql);
-
-        $tutores = [];
-        while ($fila = mysqli_fetch_assoc($res)) {
-            $tutores[] = $fila;
+        // Filtramos por nombre
+        if (!empty($filtros['nombre'])) {
+            $sql .= " AND alumno.Nombre LIKE :nombre";
+            $params[':nombre'] = $filtros['nombre'] . '%';
         }
-        return $tutores;
+    
+        // Filtramos por primer apellido
+        if (!empty($filtros['primerAp'])) {
+            $sql .= " AND alumno.Primer_Apellido LIKE :primerAp";
+            $params[':primerAp'] = $filtros['primerAp'] . '%';
+        }
+    
+        // Filtramos por segundo apellido
+        if (!empty($filtros['segundoAp'])) {
+            $sql .= " AND alumno.Segundo_Apellido LIKE :segundoAp";
+            $params[':segundoAp'] = $filtros['segundoAp'] . '%';
+        }
+    
+        // Filtramos por fecha de nacimiento
+        if (!empty($filtros['fechaNacimiento'])) {
+            $sql .= " AND alumno.Fecha_Nacimiento = :fechaNacimiento";
+            $params[':fechaNacimiento'] = $filtros['fechaNacimiento'];
+        }
+    
+        // Filtramos por semestre
+        if (!empty($filtros['semestre'])) {
+            $sql .= " AND alumno.Semestre = :semestre";
+            $params[':semestre'] = (int)$filtros['semestre'];
+        }
+    
+        // Filtramos por carrera
+        if (!empty($filtros['carrera'])) {
+            $sql .= " AND carrera.Nombre_carrera LIKE :carrera";
+            $params[':carrera'] = '%' . $filtros['carrera'] . '%';
+        }
+    
+        // Filtramos por tutor
+        if (!empty($filtros['tutor'])) {
+            $sql .= " AND CONCAT(tutor.Titulo, ' ', tutor.Nombre, ' ', tutor.Primer_Apellido, ' ', tutor.Segundo_Apellido) LIKE :tutor";
+            $params[':tutor'] = '%' . $filtros['tutor'] . '%';
+        }
+    
+        if (!empty($filtros['enRiesgo'])) {
+            if ($filtros['enRiesgo'] === 'Sí') {
+                $sql .= " AND alumno.enRiesgo = 'Sí'";  // Comparamos con 'Sí'
+            } elseif ($filtros['enRiesgo'] === 'No') {
+                $sql .= " AND alumno.enRiesgo = 'No'";  // Comparamos con 'No'
+            }
+        }
+        
+    
+        // Preparar y ejecutar la consulta
+        $stmt = $this->conexion->prepare($sql);
+        
+        if ($stmt->execute($params)) {
+            return $stmt;  // Retornamos el resultado de la consulta
+        } else {
+            die("Error al ejecutar la consulta: " . implode(" - ", $stmt->errorInfo()));
+        }
     }
-     //----------------------------OBTENER CARRERAS----------------------------
+    
+
+
+    //---------------------------- OTROS MÉTODOS ---------------------------------
+    public function obtenerTutores() {
+        $sql = "SELECT id_tutor, nombre, primer_apellido, segundo_apellido, titulo FROM tutor";
+        $stmt = $this->conexion->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function obtenerAlumnoPorNumeroDeControl($numeroDeControl) {
+        $sql = "SELECT Num_Control, Nombre, Primer_Apellido, Id_carrera, Semestre 
+                FROM alumno 
+                WHERE Num_Control = :numeroDeControl"; // Usar Primer_Apellido correctamente
+    
+        $stmt = $this->conexion->prepare($sql); 
+        $stmt->bindParam(':numeroDeControl', $numeroDeControl, PDO::PARAM_STR);
+        $stmt->execute();
+    
+        $alumno = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        if ($alumno) {
+            return (object) [
+                'getNumeroDeControl' => $alumno['Num_Control'],
+                'getNombre' => $alumno['Nombre'],
+                'getPrimerAp' => $alumno['Primer_Apellido'], // Columna corregida
+                'getCarrera' => $alumno['Id_carrera'],
+                'getSemestre' => $alumno['Semestre'],
+            ];
+        }
+    
+        return null;
+    }
+    
+
+    // Método para obtener calificaciones por alumno
+    public function obtenerCalificacionesPorAlumno($numeroDeControl) {
+        try {
+            $sql = "SELECT ID_asignatura, Puntaje 
+                    FROM calificacion 
+                    WHERE Numero_de_Control = :numeroDeControl"; // Cambiar a Num_Control
+            
+            $stmt = $this->conexion->prepare($sql); 
+            $stmt->bindParam(':numeroDeControl', $numeroDeControl, PDO::PARAM_STR);
+            $stmt->execute();
+    
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error en obtenerCalificacionesPorAlumno: " . $e->getMessage());
+            return [];
+        }
+    }
+    
+    
+    
     public function obtenerCarreras() {
         $sql = "SELECT Id_carrera, Nombre_carrera FROM carrera";
-        $res = mysqli_query($this->conexion->getConexion(), $sql);
-    
-        $carreras = [];
-        while ($fila = mysqli_fetch_assoc($res)) {
-            $carreras[] = $fila;
-        }
-        return $carreras;
-  
-    }
-    public function obtenerAlumnoPorNumControl2($numControl) {
-        // Crear una nueva instancia de conexión
-        $dbConexion = new ConexionBDEscuela();
-        $conexion = $dbConexion->getConexion();
-    
-        // Sanitizar el número de control para evitar inyecciones SQL
-        $numControl = mysqli_real_escape_string($conexion, $numControl);
-    
-        // Construir y ejecutar la consulta
-        $query = "SELECT * FROM vista_informacion_alumno_calif WHERE Numero_Control = '$numControl'";
-        $resultado = mysqli_query($conexion, $query);
-    
-        if (!$resultado) {
-            die('Error al ejecutar la consulta: ' . mysqli_error($conexion));
-        }
-    
-        // Verificar si hay resultados
-        if (mysqli_num_rows($resultado) > 0) {
-            return mysqli_fetch_assoc($resultado);
-        } else {
-            return null; // No se encontró el alumno
-        }
-    }
-    
-
-    public function obtenerAlumnoPorNumeroDeControl($numeroDeControl) {
-        $sql = "SELECT * FROM alumno WHERE Num_Control = '$numeroDeControl'";
-        $res = mysqli_query($this->conexion->getConexion(), $sql);
-    
-        if ($fila = mysqli_fetch_assoc($res)) {
-            // Crear y devolver un objeto Alumno basado en los datos obtenidos
-            return new Alumno(
-                $fila['Num_Control'],
-                $fila['Nombre'],
-                $fila['Primer_Apellido'],
-                $fila['Segundo_Apellido'],
-                $fila['Fecha_Nacimiento'],
-                $fila['Semestre'],
-                $fila['Id_carrera'],
-                $fila['Id_tutor'],
-                $fila['enRiesgo'] 
-            );
-        }
-        return null; // Devuelve null si no se encuentra el alumno
-    }
-
-    
-    public function obtenerIdCarreraPorAbreviatura($abreviatura) {
-        $sql = "SELECT Id_carrera FROM carrera WHERE TRIM(LOWER(abreviatura)) = TRIM(LOWER('$abreviatura'))";
-        $result = mysqli_query($this->conexion->getConexion(), $sql);
-        if ($row = mysqli_fetch_assoc($result)) {
-            return $row['Id_carrera'];
-        }
-        return null; // No encontrado
-    }
-    
-    public function obtenerIdTutorPorNombre($nombreCompleto) {
-        $sql = "SELECT Id_tutor 
-                FROM tutor 
-                WHERE TRIM(LOWER(CONCAT(titulo, ' ', nombre, ' ', primer_apellido, ' ', segundo_apellido))) = TRIM(LOWER('$nombreCompleto'))";
-        $result = mysqli_query($this->conexion->getConexion(), $sql);
-        if ($row = mysqli_fetch_assoc($result)) {
-            return $row['Id_tutor'];
-        }
-        return null; 
+        $stmt = $this->conexion->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function obtenerUltimoNumControl() {
-    $conexion = $this->conexion->getConexion();  
-
-    $query = "SELECT num_control FROM alumno ORDER BY num_control DESC LIMIT 1";
-    $result = mysqli_query($conexion, $query);
-
-    if ($result && mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-        return $row['num_control'];
-    } else {
-        return null;
+        $sql = "SELECT Num_Control FROM alumno ORDER BY Num_Control DESC LIMIT 1";
+        $stmt = $this->conexion->query($sql);
+        return $stmt->fetchColumn();
     }
-}
 
-    
-    public function obtenerCalificacionesPorAlumno($numeroDeControl) {
-        $sql = "SELECT c.ID_asignatura, a.Nombre_asignatura, c.Puntaje
-                FROM calificacion c
-                INNER JOIN asignatura a ON c.ID_asignatura = a.ID_asignatura
-                WHERE c.Numero_de_control = ?";
-        $stmt = $this->conexion->getConexion()->prepare($sql);
-        $stmt->bind_param("s", $numeroDeControl);
+    public function obtenerIdTutorPorNombre($nombreCompleto) {
+        $sql = "SELECT id_tutor FROM tutor WHERE CONCAT(titulo,' ',nombre, ' ', primer_apellido, ' ', segundo_apellido) = :nombreCompleto";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bindParam(':nombreCompleto', $nombreCompleto, PDO::PARAM_STR);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $calificaciones = [];
-        while ($row = $result->fetch_assoc()) {
-            $calificaciones[] = $row;
-        }
-        $stmt->close();
-        return $calificaciones;
+        return $stmt->fetchColumn(); // Devuelve el primer valor (id_tutor)
     }
+    public function obtenerIdCarreraPorAbreviatura($abreviatura) {
+        $sql = "SELECT Id_carrera FROM carrera WHERE Abreviatura = :abreviatura";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bindParam(':abreviatura', $abreviatura, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchColumn(); // Devuelve el primer valor (Id_carrera)
+    }
+        
 }
 ?>
