@@ -1,14 +1,13 @@
 <?php
 class ConexionBDEscuela {
-    private static $instancia = null; // Almacena la única instancia de la clase
+    private static $instancia = null;
     private $conexion;
     private $host = "localhost";
-    private $port = "3308"; // Especificar el puerto si es necesario
+    private $port = "3308";
     private $usuario = "victorcastro";
     private $password = "itsj";
     private $bd = "EscuelaBDProyecto";
 
-    // Constructor privado para evitar instanciación directa
     private function __construct() {
         try {
             $dsn = "mysql:host=$this->host;port=$this->port;dbname=$this->bd;charset=utf8";
@@ -22,10 +21,8 @@ class ConexionBDEscuela {
     // Evitar la clonación de la instancia
     private function __clone() {}
 
-    // Evitar la deserialización de la instancia
      function __wakeup() {}
 
-    // Método estático para obtener la instancia única
     public static function getInstancia() {
         if (self::$instancia === null) {
             self::$instancia = new self();

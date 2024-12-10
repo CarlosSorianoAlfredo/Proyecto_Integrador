@@ -18,7 +18,7 @@ $num=$alumnoDAO->obtenerUltimoNumControl()+1;
     <title>Registrar Alumno</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles/style_altas.css">
-
+    <script src="../../backend/scripts/validar_altas.js"></script>
     <style>.alert {
     transition: opacity 1s ease-out;
     }
@@ -41,7 +41,7 @@ $num=$alumnoDAO->obtenerUltimoNumControl()+1;
                 <?php unset($_SESSION['mensaje']); ?>
             <?php endif; ?>
 
-            <form action="../../backend/controllers/procesar_alta_alumno.php" method="POST">
+            <form action="../../backend/controllers/procesar_alta_alumno.php" method="POST" >
                 <div class="row g-3">
                 <div class="col-md-6">
         <label for="caja_num_control" class="form-label">Número de Control</label>

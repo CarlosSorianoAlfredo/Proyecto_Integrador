@@ -18,33 +18,58 @@ class AlumnoDAO {
     //=========================== METODOS ABCC (CRUD) ==========================
     //---------------------------- ALTAS ---------------------------------
     public function agregarAlumno($alumno) {
-        $sql = "INSERT INTO alumno (Num_Control, Nombre, Primer_Apellido, Segundo_Apellido, Fecha_Nacimiento, Semestre, Id_carrera, enRiesgo, Id_tutor) 
-                VALUES (:numControl, :nombre, :primerAp, :segundoAp, :fechaNacimiento, :semestre, :carrera, :enRiesgo, :idTutor)";
-         $stmt = $this->conexion->prepare($sql);
+        try {
+            $this->conexion->beginTransaction();
+            
+            $sql = "INSERT INTO alumno (Num_Control, Nombre, Primer_Apellido, Segundo_Apellido, Fecha_Nacimiento, Semestre, Id_carrera, enRiesgo, Id_tutor) 
+                    VALUES (:numControl, :nombre, :primerAp, :segundoAp, :fechaNacimiento, :semestre, :carrera, :enRiesgo, :idTutor)";
+            $stmt = $this->conexion->prepare($sql);
 
-        $stmt->bindValue(':numControl', $alumno->getNumControl());
-        $stmt->bindValue(':nombre', $alumno->getNombre());
-        $stmt->bindValue(':primerAp', $alumno->getPrimerAp());
-        $stmt->bindValue(':segundoAp', $alumno->getSegundoAp());
-        $stmt->bindValue(':fechaNacimiento', $alumno->getFechaNacimiento());
-        $stmt->bindValue(':semestre', $alumno->getSemestre(), PDO::PARAM_INT);
-        $stmt->bindValue(':carrera', $alumno->getCarrera(), PDO::PARAM_INT);
-        $stmt->bindValue(':enRiesgo', $alumno->getEnRiesgo(), PDO::PARAM_STR);
-        $stmt->bindValue(':idTutor', $alumno->getTutor(), PDO::PARAM_INT);
+            $stmt->bindValue(':numControl', $alumno->getNumControl());
+            $stmt->bindValue(':nombre', $alumno->getNombre());
+            $stmt->bindValue(':primerAp', $alumno->getPrimerAp());
+            $stmt->bindValue(':segundoAp', $alumno->getSegundoAp());
+            $stmt->bindValue(':fechaNacimiento', $alumno->getFechaNacimiento());
+            $stmt->bindValue(':semestre', $alumno->getSemestre(), PDO::PARAM_INT);
+            $stmt->bindValue(':carrera', $alumno->getCarrera(), PDO::PARAM_INT);
+            $stmt->bindValue(':enRiesgo', $alumno->getEnRiesgo(), PDO::PARAM_STR);
+            $stmt->bindValue(':idTutor', $alumno->getTutor(), PDO::PARAM_INT);
 
-        return $stmt->execute();
+            $stmt->execute();
+            
+            $this->conexion->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->conexion->rollBack();
+            error_log("Error en agregarAlumno: " . $e->getMessage());
+            return false;
+        }
     }
 
+    
     //---------------------------- BAJAS ---------------------------------
     public function eliminarAlumno($numControl) {
-        $sql = "DELETE FROM alumno WHERE Num_Control = :numControl";
-        $stmt = $this->conexion->prepare($sql);
-        $stmt->bindValue(':numControl', $numControl);
-        return $stmt->execute();
-    }
+        try {
+            $this->conexion->beginTransaction();
 
-    //---------------------------- CAMBIOS ---------------------------------
-    public function actualizarAlumno($alumno) {
+            $sql = "DELETE FROM alumno WHERE Num_Control = :numControl";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindValue(':numControl', $numControl);
+            $stmt->execute();
+
+            $this->conexion->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->conexion->rollBack();
+            error_log("Error en eliminarAlumno: " . $e->getMessage());
+            return false;
+        }
+    }
+//---------------------------- CAMBIOS ---------------------------------
+public function actualizarAlumno($alumno) {
+    try {
+        $this->conexion->beginTransaction();
+
         $sql = "
             UPDATE alumno 
             SET 
@@ -60,19 +85,17 @@ class AlumnoDAO {
                 Num_Control = :numControl";
         
         $stmt = $this->conexion->prepare($sql);
-    
-        // Almacenar los valores en variables
+
         $nombre = $alumno->getNombre();
         $primerAp = $alumno->getPrimerAp();
         $segundoAp = $alumno->getSegundoAp();
         $fechaNacimiento = $alumno->getFechaNacimiento();
         $semestre = $alumno->getSemestre();
-        $idCarrera = $alumno->getCarrera(); 
+        $idCarrera = $alumno->getCarrera();
         $idTutor = $alumno->getTutor();
-        $enRiesgo = $alumno->getEnRiesgo(); // 'Si' o 'No'
+        $enRiesgo = $alumno->getEnRiesgo();
         $numControl = $alumno->getNumControl();
-    
-        // Usar las variables para bindParam
+
         $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
         $stmt->bindParam(':primerAp', $primerAp, PDO::PARAM_STR);
         $stmt->bindParam(':segundoAp', $segundoAp, PDO::PARAM_STR);
@@ -80,14 +103,19 @@ class AlumnoDAO {
         $stmt->bindParam(':semestre', $semestre, PDO::PARAM_INT);
         $stmt->bindParam(':idCarrera', $idCarrera, PDO::PARAM_INT);
         $stmt->bindParam(':idTutor', $idTutor, PDO::PARAM_INT);
-        
-        // Actualización: Manejar 'enRiesgo' como cadena
-        $stmt->bindParam(':enRiesgo', $enRiesgo, PDO::PARAM_STR); 
-    
+        $stmt->bindParam(':enRiesgo', $enRiesgo, PDO::PARAM_STR);
         $stmt->bindParam(':numControl', $numControl, PDO::PARAM_INT);
-    
-        return $stmt->execute();
+
+        $stmt->execute();
+
+        $this->conexion->commit();
+        return true;
+    } catch (PDOException $e) {
+        $this->conexion->rollBack();
+        error_log("Error en actualizarAlumno: " . $e->getMessage());
+        return false;
     }
+}
     
 
     public function obtenerAlumnoPorNumControl2($numControl) {

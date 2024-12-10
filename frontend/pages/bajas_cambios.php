@@ -15,7 +15,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Usamos aqui Jquery-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <script src="../../backend/scripts/validar_cambios.js"></script>
     <style>
         .modal-wide {
             max-width: 600px;
@@ -279,7 +279,6 @@ $(document).on('click', '.eliminar', function (e) {
             $(".alert").fadeOut("slow", function () {
                 $(this).remove();
             });
-            location.reload();
 
         }, 5000);
     });
