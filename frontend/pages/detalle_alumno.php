@@ -6,6 +6,7 @@ if (isset($_GET['nc'])) {
     $numControl = $_GET['nc']; // Obtener el número de control desde la URL
     $alumnoDAO = new AlumnoDAO();
     $alumno = $alumnoDAO->obtenerAlumnoPorNumControl2($numControl);
+    $promedio = $alumnoDAO->obtenerPromedioAlumno($numControl); // Obtener el promedio
 
     if ($alumno) {
         ?>
@@ -63,7 +64,6 @@ if (isset($_GET['nc'])) {
                                 <td>
                                     <?php 
                                     if (isset($alumno['Materias_y_Calificaciones'])) {
-                                        // Si las materias y calificaciones están separadas por un delimitador, formatea la salida
                                         $materiasCalificaciones = explode(',', $alumno['Materias_y_Calificaciones']);
                                         foreach ($materiasCalificaciones as $materiaCalificacion) {
                                             echo $materiaCalificacion . '<br>';
@@ -73,6 +73,10 @@ if (isset($_GET['nc'])) {
                                     }
                                     ?>
                                 </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="bg-light">Promedio(Desde Function)</th>
+                                <td><?= $promedio !== null ? number_format($promedio, 2) : 'Sin promedio disponible' ?></td>
                             </tr>
                         </tbody>
                     </table>

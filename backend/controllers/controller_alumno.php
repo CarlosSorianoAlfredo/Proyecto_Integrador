@@ -312,6 +312,20 @@ public function actualizarAlumno($alumno) {
         return null;
     }
     
+    public function obtenerPromedioAlumno($numControl) {
+        try {
+            $sql = "SELECT calcular_promedio_alumno(:numControl) AS Promedio";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':numControl', $numControl, PDO::PARAM_STR);
+            $stmt->execute();
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $resultado['Promedio'] ?? null;
+        } catch (PDOException $e) {
+            error_log("Error en obtenerPromedioAlumno: " . $e->getMessage());
+            return null;
+        }
+    }
+    
 
     // Método para obtener calificaciones por alumno
     public function obtenerCalificacionesPorAlumno($numeroDeControl) {
