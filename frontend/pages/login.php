@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +21,11 @@
 </head>
 <body>
     <div class="container">
+    <?php
+if (isset($_GET['mensaje']) && $_GET['mensaje'] === 'sesion_expirada') {
+    echo "<div class='alert alert-warning'>Tu sesión ha expirado por inactividad. Por favor, inicia sesión nuevamente.</div>";
+}
+?>
         <?php
         session_start();
         if (isset($_SESSION['mensaje'])) {
